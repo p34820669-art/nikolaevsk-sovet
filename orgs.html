@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260929s">
+<link rel="stylesheet" href="css/style.css?v=20260929t">
 </head>
 <body>
 <header class="hero">
@@ -35,7 +35,7 @@
   <div id="cats"></div>
 
   <h2 style="margin-top:34px">Организации из архивных фондов</h2>
-  <p class="sec-sub">Перечень организаций города и района, документы которых хранятся в архиве. Годы указаны так, как в перечне автора проекта: вероятно, это крайние даты документов фонда, а не точные даты создания и закрытия организации — сверьте с архивом.</p>
+  <p class="sec-sub">Организации города и района, документы которых хранятся в муниципальном архиве Николаевского района (по описи фондов архива; показаны организации, документы которых начинаются не позже 1991 года). Годы — это годы документов фонда, а не точные даты создания и закрытия организации. Строки с отступом — прежние и последующие названия той же организации.</p>
   <div id="arch"></div>
 
   <p class="sec-sub" style="margin-top:22px">Список 1991 года составлен автором проекта по памяти и материалам; в рабочих файлах автора он называется «Чёрный список капитализма». Список дополняется. Если вы знаете, что здесь не хватает или указано неверно — напишите автору (контакт — в блоке «О проекте» на <a href="index.html#about">главной странице</a>).</p>
@@ -46,16 +46,16 @@
     <a href="#top">Наверх ↑</a>
   </div>
 </footer>
-<script src="data/events.js?v=20260929s"></script>
-<script src="data/orgs.js?v=20260929s"></script>
-<script src="js/common.js?v=20260929s"></script>
-<script src="js/game.js?v=20260929s"></script>
+<script src="data/events.js?v=20260929t"></script>
+<script src="data/orgs.js?v=20260929t"></script>
+<script src="js/common.js?v=20260929t"></script>
+<script src="js/game.js?v=20260929t"></script>
 <script>
 (function () {
   var D = window.ORGS, catsBox = document.getElementById("cats"), archBox = document.getElementById("arch"), cnt = document.getElementById("cnt");
-  function row(a, b) {
+  function row(a, b, sub) {
     var tr = document.createElement("tr"); tr.style.borderTop = "1px solid var(--line)";
-    var x = document.createElement("td"); x.style.cssText = "padding:6px 10px 6px 0"; x.textContent = a;
+    var x = document.createElement("td"); x.style.cssText = "padding:6px 10px 6px " + (sub ? "22px" : "0"); if (sub) x.style.color = "var(--muted)"; else if (!b) x.style.fontWeight = "600"; x.textContent = a;
     tr.appendChild(x);
     if (b) { var y = document.createElement("td"); y.style.cssText = "padding:6px 0;color:var(--muted);text-align:right"; y.textContent = b; tr.appendChild(y); }
     return tr;
@@ -81,7 +81,7 @@
     var ar = D.archive.filter(function (r) { return !q || (r[0] + " " + r[1]).toLowerCase().indexOf(q) >= 0; });
     if (ar.length) {
       var t = document.createElement("table"); t.style.cssText = "width:100%;border-collapse:collapse";
-      ar.forEach(function (r) { t.appendChild(row(r[0], r[1])); });
+      ar.forEach(function (r) { t.appendChild(row(r[0], r[1], r[2])); });
       archBox.appendChild(t);
     } else if (q) { archBox.textContent = "В перечне архивных фондов ничего не найдено."; }
     cnt.textContent = q ? ("Найдено: " + total + " в списке 1991 года, " + ar.length + " в архивных фондах") : ("В списке 1991 года — " + total + " позиций; в перечне архивных фондов — " + D.archive.length);
