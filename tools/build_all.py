@@ -15,3 +15,5 @@ for script in ("parse_chronology.py", "build_map_data.py", "build_curated.py", "
     if r.returncode:
         sys.exit(r.returncode)
 print("Готово. Откройте index.html.")
+
+# Напоминание: после правок css/js/data поменяйте метку версии ?v=... в HTML (см. README), иначе телефоны покажут старую копию из кеша.
