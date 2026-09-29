@@ -30,16 +30,19 @@
   var brand = document.createElement("a");
   brand.className = "brand";
   brand.href = "index.html";
-  brand.innerHTML = "Николаевск-на-Амуре · <b>советские годы</b>";
+  brand.innerHTML = "<span class=\"bn\">Николаевск-на-Амуре</span><span class=\"sep\"> · </span><b>советские годы</b>";
   inner.appendChild(brand);
+  var links = document.createElement("div");   // ссылки в отдельном блоке: на телефоне он уходит на вторую строку
+  links.className = "navlinks";
   PAGES.forEach(function (p) {
     var a = document.createElement("a");
     a.className = "nl";
     a.href = p[0];
     a.textContent = p[1];
     if (p[0].split("#")[0] === here) a.setAttribute("aria-current", "page");
-    inner.appendChild(a);
+    links.appendChild(a);
   });
+  inner.appendChild(links);
   var tb = document.createElement("button");
   tb.className = "theme-btn";
   tb.id = "themeBtn";
