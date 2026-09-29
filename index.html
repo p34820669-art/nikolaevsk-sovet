@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Николаевск-на-Амуре. Советские годы</title>
+<meta name="description" content="Интерактивная летопись Николаевска-на-Амуре и района, 1918–1991: события, цифры, карта, игры — год за годом.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Николаевск-на-Амуре и район</p>
+    <h1>Советские годы<span class="hero-years">1918 — 1991</span></h1>
+    <p class="lead">Как за 73 года из «захолустного городка» на берегу Амура вырос порт, город корабелов, моряков и авиаторов. Читайте по годам, смотрите цифры, ищите улицы на карте и проверяйте себя в играх.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#timeline">Начать с 1918 года</a>
+      <button class="btn" id="randomBtn" type="button">Случайное событие</button>
+    </div>
+    <p class="stats" id="stats"></p>
+    <div class="gates">
+      <a class="gate" href="chapter.html"><span class="ico">⚓</span><strong>Главы по эпохам</strong><span class="d">Семь глав, 1918–1991: цифры, люди, викторины и задания для класса</span></a>
+      <a class="gate" href="life.html"><span class="ico">🏠</span><strong>Жизнь людей</strong><span class="d">Школа, больница, жильё, кино, телефон: что и когда становилось доступным</span></a>
+      <a class="gate" href="map.html"><span class="ico">🗺</span><strong>Карта города</strong><span class="d">Улицы и места, к которым привязана история</span></a>
+      <a class="gate" href="play.html"><span class="ico">🎯</span><strong>Игра «Угадай год»</strong><span class="d">Проверьте, как хорошо вы знаете историю города</span></a>
+    </div>
+  </div>
+</header>
+
+<nav class="rail" id="rail" aria-label="Навигация по годам">
+  <div class="wrap">
+    <div class="rail-head">
+      <span class="rail-title">Годы</span>
+      <span class="rail-hint">Высота столбика — сколько событий записано в этом году</span>
+    </div>
+    <div class="bars" id="bars" role="list"></div>
+    <div class="eras" id="eras"></div>
+  </div>
+</nav>
+
+<section class="tools" aria-label="Поиск и фильтры">
+  <div class="wrap">
+    <label class="search">
+      <span class="sr">Поиск по событиям</span>
+      <input id="q" type="search" placeholder="Поиск: порт, школа, Маго, больница…" autocomplete="off">
+    </label>
+    <div class="chips" id="themeChips" role="group" aria-label="Темы"></div>
+    <p class="result-line" id="resultLine" aria-live="polite"></p>
+  </div>
+</section>
+
+<main id="timeline" class="wrap timeline"></main>
+
+<section class="about wrap" id="about">
+  <h2>О проекте</h2>
+  <p>Это открытая летопись советского периода истории Николаевска-на-Амуре и Николаевского района. Основа — хронология событий, к которой добавляются главы, цифры, карта, люди и документы.</p>
+  <p><strong>Как это устроено.</strong> Записи собраны из архивных, музейных и печатных источников. Пометка о проверке появится у записей, сверенных с первоисточником; остальные пока ждут проверки. Если вы нашли неточность или можете дополнить событие — напишите автору.</p>
+  <p class="feedback" id="feedback" hidden></p>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Николаевск-на-Амуре · Советские годы · проект в разработке</span>
+    <a href="#top">Наверх ↑</a>
+  </div>
+</footer>
+
+<script src="data/events.js"></script>
+<script src="data/figures.js"></script>
+<script src="data/chapters.js"></script>
+<script src="data/site.js"></script>
+<script src="js/common.js"></script>
+<script src="js/game.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

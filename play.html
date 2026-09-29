@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Игры · Николаевск-на-Амуре</title>
+<meta name="description" content="Игры по истории Николаевска-на-Амуре: угадай год события и определи, что было раньше.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Проверь себя</p>
+    <h1>Игры</h1>
+    <p class="lead">События взяты из настоящей хронологии города. Не нужно знать все даты — достаточно чувствовать эпоху.</p>
+  </div>
+</header>
+<main class="wrap sec">
+  <div id="menu" class="play-modes">
+    <button class="mode" id="m-year" type="button"><span class="ico">🎯</span><strong>Угадай год</strong><span class="d">8 событий. Передвиньте ползунок на год, когда это случилось. Чем ближе — тем больше очков.</span></button>
+    <button class="mode" id="m-pair" type="button"><span class="ico">⚖️</span><strong>Раньше или позже?</strong><span class="d">Два события — какое случилось раньше? Серия побед даёт рекорд.</span></button>
+    <a class="mode" href="chapter.html?c=war#quiz"><span class="ico">📚</span><strong>Викторина: война</strong><span class="d">8 вопросов по главе 1941–1945 с пояснениями.</span></a>
+    <a class="mode" href="chapter.html"><span class="ico">🏛</span><strong>Викторины по всем главам</strong><span class="d">Семь эпох, 1918–1991: у каждой главы — свои 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=postwar#quiz"><span class="ico">✈️</span><strong>Викторина: после войны</strong><span class="d">8 вопросов по главе 1946–1953: карточки, автобусы, авиация.</span></a>
+  </div>
+  <div id="game" class="game" hidden></div>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>Николаевск-на-Амуре · Советские годы · проект в разработке</span>
+    <a href="#top">Наверх ↑</a>
+  </div>
+</footer>
+<script src="data/events.js"></script>
+<script src="js/common.js"></script>
+<script src="js/game.js"></script>
+<script src="js/play.js"></script>
+</body>
+</html>
