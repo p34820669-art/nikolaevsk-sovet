@@ -18,7 +18,8 @@
     ["chapter.html", "Главы"],
     ["life.html", "Жизнь"],
     ["map.html", "Карта"],
-    ["play.html", "Игра"]
+    ["play.html", "Игра"],
+    ["help.html", "Справка"]
   ];
   var here = (location.pathname.split("/").pop() || "index.html");
   var nav = document.createElement("nav");
