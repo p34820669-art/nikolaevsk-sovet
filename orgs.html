@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Предприятия и учреждения 1991 года · Николаевск-на-Амуре</title>
+<meta name="description" content="Что существовало в Николаевске-на-Амуре и районе к 1991 году: заводы, порт, больницы, школы, клубы — и список организаций из архивных фондов с годами.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Николаевск-на-Амуре. Советские годы">
+<meta property="og:title" content="Предприятия и учреждения 1991 года">
+<meta property="og:description" content="Заводы, порт, больницы, школы, клубы города и района к 1991 году; перечень организаций из архивных фондов.">
+<meta property="og:url" content="https://p34820669-art.github.io/nikolaevsk-sovet/orgs.html">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://p34820669-art.github.io/nikolaevsk-sovet/img/cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=20260929r">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Город и район в 1991 году</p>
+    <h1>Предприятия и учреждения 1991 года</h1>
+    <p class="lead">Что работало в городе и районе к 1991 году: заводы, порт, больницы, школы и училища, клубы, хозяйства. По оценке автора проекта, все они после 1991 года полностью прекратили работу или потеряли прежний масштаб.</p>
+  </div>
+</header>
+<main class="wrap sec">
+  <label class="search" style="margin-bottom:18px">
+    <span class="sr">Поиск по названию</span>
+    <input id="q" type="search" placeholder="Поиск: завод, школа, порт, Маго…" autocomplete="off">
+  </label>
+  <p class="result-line" id="cnt" aria-live="polite"></p>
+  <div id="cats"></div>
+
+  <h2 style="margin-top:34px">Организации из архивных фондов</h2>
+  <p class="sec-sub">Перечень организаций города и района, документы которых хранятся в архиве. Годы указаны так, как в перечне автора проекта: вероятно, это крайние даты документов фонда, а не точные даты создания и закрытия организации — сверьте с архивом.</p>
+  <div id="arch"></div>
+
+  <p class="sec-sub" style="margin-top:22px">Список 1991 года составлен автором проекта по памяти и материалам; в рабочих файлах автора он называется «Чёрный список капитализма». Список дополняется. Если вы знаете, что здесь не хватает или указано неверно — напишите автору (контакт — в блоке «О проекте» на <a href="index.html#about">главной странице</a>).</p>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>Николаевск-на-Амуре · Советские годы · проект в разработке</span>
+    <a href="#top">Наверх ↑</a>
+  </div>
+</footer>
+<script src="data/events.js?v=20260929r"></script>
+<script src="data/orgs.js?v=20260929r"></script>
+<script src="js/common.js?v=20260929r"></script>
+<script src="js/game.js?v=20260929r"></script>
+<script>
+(function () {
+  var D = window.ORGS, catsBox = document.getElementById("cats"), archBox = document.getElementById("arch"), cnt = document.getElementById("cnt");
+  function row(a, b) {
+    var tr = document.createElement("tr"); tr.style.borderTop = "1px solid var(--line)";
+    var x = document.createElement("td"); x.style.cssText = "padding:6px 10px 6px 0"; x.textContent = a;
+    tr.appendChild(x);
+    if (b) { var y = document.createElement("td"); y.style.cssText = "padding:6px 0;color:var(--muted);text-align:right"; y.textContent = b; tr.appendChild(y); }
+    return tr;
+  }
+  function render(q) {
+    q = (q || "").trim().toLowerCase();
+    catsBox.innerHTML = ""; archBox.innerHTML = "";
+    var total = 0;
+    D.cats.forEach(function (c) {
+      var rows = c.rows.filter(function (r) { return !q || (r[0] + " " + r[1]).toLowerCase().indexOf(q) >= 0; });
+      if (!rows.length) return;
+      total += rows.length;
+      var card = document.createElement("article"); card.className = "lcard"; card.style.marginBottom = "14px";
+      var h = document.createElement("h3"); h.textContent = c.title + " · " + rows.length; card.appendChild(h);
+      var ul = document.createElement("ul"); ul.style.cssText = "margin:8px 0 0;padding-left:18px";
+      rows.forEach(function (r) {
+        var li = document.createElement("li"); li.style.margin = "3px 0"; li.textContent = r[0];
+        if (r[1]) { var s = document.createElement("span"); s.className = "cnt"; s.style.marginLeft = "6px"; s.textContent = "— " + r[1]; li.appendChild(s); }
+        ul.appendChild(li);
+      });
+      card.appendChild(ul); catsBox.appendChild(card);
+    });
+    var ar = D.archive.filter(function (r) { return !q || (r[0] + " " + r[1]).toLowerCase().indexOf(q) >= 0; });
+    if (ar.length) {
+      var t = document.createElement("table"); t.style.cssText = "width:100%;border-collapse:collapse";
+      ar.forEach(function (r) { t.appendChild(row(r[0], r[1])); });
+      archBox.appendChild(t);
+    } else if (q) { archBox.textContent = "В перечне архивных фондов ничего не найдено."; }
+    cnt.textContent = q ? ("Найдено: " + total + " в списке 1991 года, " + ar.length + " в архивных фондах") : ("В списке 1991 года — " + total + " позиций; в перечне архивных фондов — " + D.archive.length);
+  }
+  document.getElementById("q").addEventListener("input", function (e) { render(e.target.value); });
+  render("");
+})();
+</script>
+</body>
+</html>
