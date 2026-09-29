@@ -135,6 +135,23 @@ def load_extra():
             })
     return res
 
+def apply_rewrites(events):
+    """Переформулировки записей docx (data/rewrites.csv): текст подменяется при сборке, исходный docx не меняется."""
+    import csv
+    path = OUT.parent / "rewrites.csv"
+    if not path.exists():
+        return
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f, delimiter=";"):
+            rx = re.compile(row["find"])
+            hits = [e for e in events if e["year"] == int(row["year"]) and rx.search(e["text"])]
+            if len(hits) != 1:
+                print(f"ПЕРЕФОРМУЛИРОВКА НЕ ПРИВЯЗАНА ({len(hits)}): {row['year']} {row['find']}")
+                continue
+            hits[0]["original"] = hits[0]["text"]
+            hits[0]["text"] = row["newtext"]
+            hits[0]["rewrite"] = row["reason"]
+
 def apply_annotations(events):
     """Примечания к записям docx (data/annotations.csv): уточнения по документам, без правки самого docx."""
     import csv
@@ -188,6 +205,7 @@ def main():
         best = max(items, key=lambda e: (e["score"], len(e["text"])))
         best["lead"] = True
 
+    apply_rewrites(events)
     apply_annotations(events)
     extras = load_extra()
     events.extend(extras)

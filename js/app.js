@@ -79,6 +79,7 @@
       b.addEventListener("click", function () { state.expanded[e.id] = !open; render(); });
       c.appendChild(b);
     }
+    if (e.rewrite) c.appendChild(el("p", "src note", "Формулировка уточнена редактором: " + e.rewrite));
     if (e.annotation) {   // уточнение к записи из хронологии автора
       var an = el("p", "src annot");
       an.appendChild(el("b", null, "Уточнение по документам: "));
