@@ -563,20 +563,6 @@
    "verified": false
   },
   {
-   "id": 31,
-   "year": 1924,
-   "era": "Строим заново",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 32,
    "year": 1924,
    "era": "Строим заново",
@@ -1136,20 +1122,6 @@
    "verified": false
   },
   {
-   "id": 64,
-   "year": 1927,
-   "era": "Строим заново",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 65,
    "year": 1927,
    "era": "Строим заново",
@@ -1278,20 +1250,6 @@
     "Красное"
    ],
    "score": 4,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 72,
-   "year": 1929,
-   "era": "Строим заново",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -1483,20 +1441,6 @@
    "places": [
     "Красное"
    ],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 84,
-   "year": 1930,
-   "era": "Строим заново",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
    "score": 0,
    "title": "",
    "source": "",
@@ -2182,20 +2126,6 @@
    ],
    "places": [],
    "score": 2,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 123,
-   "year": 1935,
-   "era": "Строим заново",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -2929,20 +2859,6 @@
    "verified": false
   },
   {
-   "id": 165,
-   "year": 1939,
-   "era": "Строим заново",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 166,
    "year": 1939,
    "era": "Строим заново",
@@ -3480,20 +3396,6 @@
    ],
    "places": [],
    "score": 3,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 196,
-   "year": 1941,
-   "era": "Война",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -4327,20 +4229,6 @@
    "verified": false
   },
   {
-   "id": 243,
-   "year": 1945,
-   "era": "Война",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 244,
    "year": 1945,
    "era": "Война",
@@ -4782,20 +4670,6 @@
    "verified": false
   },
   {
-   "id": 269,
-   "year": 1949,
-   "era": "Восстановление",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 270,
    "year": 1949,
    "era": "Восстановление",
@@ -5002,20 +4876,6 @@
    ],
    "places": [],
    "score": 2,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 282,
-   "year": 1950,
-   "era": "Восстановление",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -6166,20 +6026,6 @@
    "verified": false
   },
   {
-   "id": 345,
-   "year": 1956,
-   "era": "Расцвет и рост",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 346,
    "year": 1956,
    "era": "Расцвет и рост",
@@ -6816,20 +6662,6 @@
    "verified": false
   },
   {
-   "id": 378,
-   "year": 1959,
-   "era": "Расцвет и рост",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 379,
    "year": 1959,
    "era": "Расцвет и рост",
@@ -7069,20 +6901,6 @@
    "places": [
     "Маго"
    ],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 392,
-   "year": 1961,
-   "era": "Расцвет и рост",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
    "score": 0,
    "title": "",
    "source": "",
@@ -7360,20 +7178,6 @@
    "verified": false
   },
   {
-   "id": 408,
-   "year": 1963,
-   "era": "Расцвет и рост",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 409,
    "year": 1963,
    "era": "Расцвет и рост",
@@ -7591,20 +7395,6 @@
     "note": "В источниках расходятся: конец 1964 года (мемуары) или 10 февраля 1965 года (Салихова). Вероятно, это одно событие (см. также запись 1965 года).",
     "source": "Материалы к истории Нижне-Амурской геологоразведочной экспедиции (Красное, 2010): сборник «Мемуары»; М. Р. Салихова. …Солнца и ветра брат. Очерки. Ижевск, 2006"
    }
-  },
-  {
-   "id": 419,
-   "year": 1964,
-   "era": "Расцвет и рост",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
   },
   {
    "id": 420,
@@ -8576,20 +8366,6 @@
    "verified": false
   },
   {
-   "id": 468,
-   "year": 1969,
-   "era": "Большие стройки",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 469,
    "year": 1969,
    "era": "Большие стройки",
@@ -9367,20 +9143,6 @@
     "Красное"
    ],
    "score": 1,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 511,
-   "year": 1974,
-   "era": "Большие стройки",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -10365,20 +10127,6 @@
    "verified": false
   },
   {
-   "id": 564,
-   "year": 1978,
-   "era": "Зрелый город",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 565,
    "year": 1978,
    "era": "Зрелый город",
@@ -10542,20 +10290,6 @@
     "Красное"
    ],
    "score": 1,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 575,
-   "year": 1979,
-   "era": "Зрелый город",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -11217,20 +10951,6 @@
    "verified": false
   },
   {
-   "id": 610,
-   "year": 1983,
-   "era": "Зрелый город",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 611,
    "year": 1983,
    "era": "Зрелый город",
@@ -11639,20 +11359,6 @@
    ],
    "places": [],
    "score": 1,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 633,
-   "year": 1985,
-   "era": "Зрелый город",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -12071,20 +11777,6 @@
     "Красное"
    ],
    "score": 1,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 657,
-   "year": 1988,
-   "era": "Перемены",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],
@@ -12560,20 +12252,6 @@
    "verified": false
   },
   {
-   "id": 684,
-   "year": 1990,
-   "era": "Перемены",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
    "id": 685,
    "year": 1990,
    "era": "Перемены",
@@ -12727,20 +12405,6 @@
    ],
    "places": [],
    "score": 1,
-   "title": "",
-   "source": "",
-   "media": [],
-   "lead": false,
-   "verified": false
-  },
-  {
-   "id": 694,
-   "year": 1991,
-   "era": "Перемены",
-   "text": "Между тем",
-   "tags": [],
-   "places": [],
-   "score": 0,
    "title": "",
    "source": "",
    "media": [],

@@ -161,6 +161,8 @@ def main():
         if year is None:
             continue
         seq += 1
+        if text.strip() == "Между тем":   # обрывок из docx без содержания; номер пропускаем, чтобы ссылки на другие записи не сдвинулись
+            continue
         score = len(LEAD_WORDS.findall(text)) + (1 if re.search(r"\d", text) else 0) + min(len(text) // 200, 2)
         events.append({
             "id": seq,
