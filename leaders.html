@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Руководители Нижнеамурья · Николаевск-на-Амуре</title>
+<meta name="description" content="Кто возглавлял исполкомы Нижнеамурского округа, Нижнеамурской области, района и города Николаевска-на-Амуре: список по годам, 1926–1996.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Николаевск-на-Амуре. Советские годы">
+<meta property="og:title" content="Руководители Нижнеамурья — списки по годам">
+<meta property="og:description" content="Председатели исполкомов округа, области, района и города: 1926–1996, по информационному сборнику.">
+<meta property="og:url" content="https://p34820669-art.github.io/nikolaevsk-sovet/leaders.html">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://p34820669-art.github.io/nikolaevsk-sovet/img/cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=20260929k">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Люди и власть</p>
+    <h1>Руководители Нижнеамурья</h1>
+    <p class="lead">Председатели исполкомов округа, области, района и города по годам. Территории менялись, поэтому списки разделены: у каждого уровня власти свои даты.</p>
+  </div>
+</header>
+<main class="wrap sec">
+  <div id="lv"></div>
+  <p class="sec-sub" style="margin-top:22px" id="src"></p>
+  <p class="sec-sub">Как менялись названия: уезд (1922) → Николаевский уезд (1925) → Нижнеамурский округ (1926) → Нижнеамурская область (1934–1956) → Николаевск-на-Амуре с районом. Подробности — в <a href="index.html#timeline">летописи</a>. Нашли неточность? Напишите автору (контакт — в блоке «О проекте» на <a href="index.html#about">главной странице</a>).</p>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>Николаевск-на-Амуре · Советские годы · проект в разработке</span>
+    <a href="#top">Наверх ↑</a>
+  </div>
+</footer>
+<script src="data/events.js?v=20260929k"></script>
+<script src="data/leaders.js?v=20260929k"></script>
+<script src="js/common.js?v=20260929k"></script>
+<script src="js/game.js?v=20260929k"></script>
+<script>
+(function () {
+  var D = window.LEADERS, box = document.getElementById("lv");
+  D.levels.forEach(function (lv) {
+    var sec = document.createElement("article"); sec.className = "lcard"; sec.style.marginBottom = "16px";
+    var h = document.createElement("h3"); h.textContent = lv.title; sec.appendChild(h);
+    if (lv.note) { var n = document.createElement("p"); n.className = "cnt"; n.textContent = lv.note; sec.appendChild(n); }
+    var t = document.createElement("table"); t.style.cssText = "width:100%;border-collapse:collapse;margin-top:8px";
+    lv.rows.forEach(function (r) {
+      var tr = document.createElement("tr"); tr.style.borderTop = "1px solid var(--line)";
+      var a = document.createElement("td"); a.textContent = r[0]; a.style.cssText = "padding:6px 10px 6px 0;white-space:nowrap;color:var(--muted);width:1%";
+      var b = document.createElement("td"); b.style.padding = "6px 0"; b.textContent = r[1];
+      if (r[2]) { var s = document.createElement("span"); s.className = "cnt"; s.style.marginLeft = "8px"; s.textContent = r[2]; b.appendChild(s); }
+      tr.appendChild(a); tr.appendChild(b); t.appendChild(tr);
+    });
+    sec.appendChild(t); box.appendChild(sec);
+  });
+  document.getElementById("src").textContent = "Источник: " + D.source;
+})();
+</script>
+</body>
+</html>
