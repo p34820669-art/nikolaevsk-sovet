@@ -112,6 +112,8 @@
       });
       c.appendChild(meta);
     }
+    var rb = window.NK.report && window.NK.report({ label: "Запись № " + e.id, hint: e.year + " год", text: e.text, path: "index.html#e" + e.id });
+    if (rb) c.appendChild(rb);
     return c;
   }
 

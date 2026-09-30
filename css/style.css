@@ -375,3 +375,32 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
 .lchart .note{color:var(--muted);font-size:13px;margin:0 0 8px}
 .lchart .cl small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
 .lchart .cbar i{background:var(--water)}
+
+/* ============ «Нашли ошибку или знаете больше?» ============ */
+.report{margin-top:10px;font-size:13px;line-height:1.45}
+.report button{background:none;border:0;padding:0;font:500 13px var(--sans);color:var(--muted);cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.report button:hover{color:var(--water)}
+.report .rmsg{display:block;margin-top:6px;padding:8px 10px;background:var(--sky);border-radius:8px;color:var(--ink)}
+.report textarea{display:block;width:100%;margin-top:6px;font:400 13px/1.4 var(--sans);padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+
+/* ============ Улицы и места памяти ============ */
+.itemgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin:0 0 8px}
+.icard{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 3px 0 var(--line);display:flex;flex-direction:column}
+.icard.flash{border-color:var(--water)}
+.icard h3{font:700 20px/1.25 var(--serif);margin:2px 0 4px}
+.icard .when{font:600 13px var(--sans);color:var(--accent);letter-spacing:.02em}
+.icard .was{font-size:14px;color:var(--muted);margin:2px 0 8px}
+.icard p{margin:0 0 8px;font-size:16px;line-height:1.55}
+.icard .kv{font-size:14px;color:var(--muted);margin:0 0 4px}
+.icard .kv b{color:var(--ink);font-weight:600}
+.icard .src{font-size:13px;line-height:1.45;color:var(--muted);margin:6px 0 0}
+.icard .src.note{font-style:italic}
+.icard .links{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:14px}
+.icard .links a{font-weight:600;text-decoration:none}
+.icard .links a:hover{text-decoration:underline}
+.icard .report{margin-top:auto;padding-top:10px}
+.kindtag{display:inline-block;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:2px 9px;border-radius:99px;background:var(--chip);color:var(--muted);margin-bottom:4px}
+.wantbox{margin-top:26px;padding:14px 18px;background:var(--surface);border:2px dashed var(--line);border-radius:16px}
+.wantbox summary{cursor:pointer;font:700 19px var(--serif)}
+.wantbox .chips button{cursor:pointer}
+.wantbox .rmsg{margin-top:12px}

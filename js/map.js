@@ -48,11 +48,24 @@
     layers.push({ kind: "poi", item: p, layer: m, settlement: true });
   });
 
+  // ---------- места памяти (data/memorials.js): точки только там, где координаты известны из OSM ----------
+  var MEM = window.MEMORIALS || [], MEMC = "#7d4f93";
+  var KIND = { "памятник": "Памятник", "доска": "Мемориальная доска", "знак": "Знак, стела, мемориал" };
+  var memGroup = L.layerGroup().addTo(map), memLayers = {};
+  MEM.forEach(function (m) {
+    if (m.lat == null) return;
+    var mk = L.circleMarker([m.lat, m.lon], { radius: 8, color: "#fff", weight: 2, fillColor: MEMC, fillOpacity: 1 }).addTo(memGroup);
+    mk.bindTooltip(m.name.length > 70 ? m.name.slice(0, 70).replace(/\s+\S*$/, "") + "…" : m.name, { direction: "top", offset: [0, -6] });
+    mk.on("click", function () { selectMem(m); });
+    memLayers[m.id] = mk;
+  });
+
   function resetStyles() {
     layers.forEach(function (l) {
       if (l.kind === "street") l.layer.setStyle({ color: l.item.hl ? HL : STREET, weight: l.item.hl ? 4 : 2.5, opacity: l.item.hl ? .8 : .5 });
       else l.layer.setStyle({ fillColor: l.settlement ? SETT : POI, radius: l.settlement ? 8 : 9 });
     });
+    Object.keys(memLayers).forEach(function (id) { memLayers[id].setStyle({ fillColor: MEMC, radius: 8 }); });
   }
 
   function evBlock(ids) {
@@ -84,6 +97,20 @@
     if (kind === "poi" && item.text) side.appendChild(el("p", null, item.text));
     if (item.note) side.appendChild(el("p", "muted", item.note));
     side.appendChild(evBlock(item.events || []));
+    if (kind === "poi") {
+      var here = MEM.filter(function (m) { return m.poi === item.title; });
+      if (here.length) {
+        side.appendChild(el("h2", null, "Места памяти здесь"));
+        var hl = el("div", "place-list");
+        here.forEach(function (m) {
+          var b = el("button", "pl", m.name); b.type = "button";
+          b.appendChild(el("small", null, m.opened));
+          b.addEventListener("click", function () { selectMem(m); });
+          hl.appendChild(b);
+        });
+        side.appendChild(hl);
+      }
+    }
     if (item.archive) {
       side.appendChild(el("div", "photonote", "📷 В архиве проекта для этого места — фото: " + item.archive + ". Они появятся здесь после согласования прав."));
     }
@@ -104,6 +131,53 @@
     else map.fitBounds(layer.getBounds(), { maxZoom: 16, padding: [60, 60] });
   }
 
+  // ---------- место памяти: панель и выделение ----------
+  function memPanel(m) {
+    side.textContent = "";
+    var back = el("button", "back", "← Все места"); back.type = "button";
+    back.addEventListener("click", function () { active = null; resetStyles(); history.replaceState(null, "", "map.html"); home(); });
+    side.appendChild(back);
+    side.appendChild(el("h2", null, m.name));
+    side.appendChild(el("p", "muted", KIND[m.kind] + " · " + m.opened));
+    side.appendChild(el("p", null, "Где: " + m.place));
+    if (m.about) side.appendChild(el("p", null, m.about));
+    if (m.author) side.appendChild(el("p", "muted", "Автор: " + m.author));
+    if (m.fate) side.appendChild(el("p", "muted", m.fate));
+    if (m.note) side.appendChild(el("p", "muted", "Примечание: " + m.note));
+    side.appendChild(el("p", "legend-map", m.pinNote || "Место на карте пока не определено: в источнике нет точного адреса."));
+    side.appendChild(el("p", "muted", "Источник: " + m.source + "."));
+    var a = el("a", null, "Карточка в разделе «Места памяти» →"); a.href = "memorials.html#" + m.id;
+    side.appendChild(a);
+    if (m.events.length) side.appendChild(evBlock(m.events));
+    var rb = NK.report && NK.report({ label: "Место памяти: " + m.name, hint: m.opened, text: m.about || m.place, path: "memorials.html#" + m.id });
+    if (rb) side.appendChild(rb);
+    side.scrollTop = 0;
+  }
+
+  function selectMem(m) {
+    resetStyles(); active = null;
+    if (window.NKG) window.NKG.once("map:mem:" + m.id, 3, "Место памяти на карте", "map:open");
+    var mk = memLayers[m.id], target = null;
+    if (mk) {
+      mk.setStyle({ fillColor: HL_ON, radius: 12 }); mk.bringToFront();
+      map.setView([m.lat, m.lon], Math.max(map.getZoom(), 16));
+    } else if (m.poi) {
+      target = layers.filter(function (l) { return l.kind === "poi" && l.item.title === m.poi; })[0];
+      if (target) {
+        target.layer.setStyle({ fillColor: HL_ON, radius: 12 }); target.layer.bringToFront();
+        map.setView([target.item.lat, target.item.lon], target.settlement ? 13 : 16);
+      }
+    } else if (m.street.length) {
+      var sel = layers.filter(function (l) { return l.kind === "street" && m.street.indexOf(l.item.name) >= 0; });
+      if (sel.length) {
+        sel.forEach(function (l) { l.layer.setStyle({ color: HL_ON, weight: 7, opacity: 1 }); l.layer.bringToFront(); });
+        map.fitBounds(L.featureGroup(sel.map(function (l) { return l.layer; })).getBounds(), { padding: [50, 50], maxZoom: 16 });
+      }
+    }
+    memPanel(m);
+    history.replaceState(null, "", "#m=" + m.id);
+  }
+
   function home() {
     side.textContent = "";
     side.appendChild(el("h1", null, "Карта города"));
@@ -114,6 +188,13 @@
       map.fitBounds(L.latLngBounds(pts), { padding: [40, 40] });
     });
     side.appendChild(all);
+    if (MEM.length) {
+      var tg = el("label", "muted"); tg.style.cssText = "display:flex;gap:8px;align-items:center;margin:0 0 12px";
+      var cb = el("input"); cb.type = "checkbox"; cb.checked = map.hasLayer(memGroup);
+      cb.addEventListener("change", function () { if (cb.checked) memGroup.addTo(map); else map.removeLayer(memGroup); });
+      tg.appendChild(cb); tg.appendChild(document.createTextNode("Показывать места памяти (фиолетовые точки)"));
+      side.appendChild(tg);
+    }
     side.appendChild(el("h2", null, "Места"));
     var list = el("div", "place-list");
     D.pois.slice().sort(function (a, b) { return (b.events.length) - (a.events.length); }).forEach(function (p) {
@@ -134,6 +215,19 @@
       });
       side.appendChild(stl);
     }
+    if (MEM.length) {
+      var dt = el("details"); dt.style.margin = "14px 0";
+      var sm = el("summary", null, "Места памяти: " + MEM.length); sm.style.cssText = "cursor:pointer;font:700 22px/1.2 var(--serif)";
+      dt.appendChild(sm);
+      var ml = el("div", "place-list");
+      MEM.slice().sort(function (a, b) { return (a.year || 9999) - (b.year || 9999); }).forEach(function (m) {
+        var b = el("button", "pl", m.name); b.type = "button";
+        b.appendChild(el("small", null, m.year ? String(m.year) : ""));
+        b.addEventListener("click", function () { selectMem(m); });
+        ml.appendChild(b);
+      });
+      dt.appendChild(ml); side.appendChild(dt);
+    }
     side.appendChild(el("h2", null, "Улицы"));
     var sl = el("div", "place-list");
     D.streets.filter(function (s) { return s.hl; }).sort(function (a, b) { return (b.events.length + b.archive / 10) - (a.events.length + a.archive / 10); }).forEach(function (s) {
@@ -143,12 +237,17 @@
       sl.appendChild(b);
     });
     side.appendChild(sl);
-    side.appendChild(el("p", "legend-map", "Оранжевые точки — посёлки района, синие — места в городе. Многовершинный и часть других посёлков ещё не нанесены."));
+    side.appendChild(el("p", "legend-map", "Оранжевые точки — посёлки района, синие — места в городе, фиолетовые — места памяти. Многовершинный и часть других посёлков ещё не нанесены."));
   }
   home();
 
   // ---------- ссылка из главы: map.html#s=улица|улица&p=посёлок|объект&t=Заголовок ----------
   function fromHash() {
+    var mm = /^#m=([\w-]+)$/.exec(location.hash);   // map.html#m=m15 — место памяти из раздела «Места памяти»
+    if (mm) {
+      var mem = MEM.filter(function (x) { return x.id === mm[1]; })[0];
+      if (mem) { selectMem(mem); return; }
+    }
     if (!/^#(s|p)=/.test(location.hash)) return;
     var params = {};
     location.hash.slice(1).split("&").forEach(function (kv) {
