@@ -112,8 +112,13 @@
       });
       c.appendChild(meta);
     }
-    var rb = window.NK.report && window.NK.report({ label: "Запись № " + e.id, hint: e.year + " год", text: e.text, path: "index.html#e" + e.id });
-    if (rb) c.appendChild(rb);
+    var foot = el("div", "cardfoot");   // постоянная ссылка на запись (страница года) и кнопка поправки
+    var pl = el("a", "permalink", "№ " + e.id);
+    pl.href = e.year + ".html#e" + e.id; pl.title = "Постоянная ссылка на запись";
+    foot.appendChild(pl);
+    var rb = window.NK.report && window.NK.report({ label: "Запись № " + e.id, hint: e.year + " год", text: e.text, path: e.year + ".html#e" + e.id });
+    if (rb) foot.appendChild(rb);
+    c.appendChild(foot);
     return c;
   }
 
@@ -156,6 +161,9 @@
       sec.style.setProperty("--era-c", color);
       var num = el("div", "year-num", String(y));
       num.appendChild(el("span", "year-count", list.length + " " + plural(list.length, "запись", "записи", "записей")));
+      var yl = el("a", "year-link", "страница года →");
+      yl.href = y + ".html"; yl.title = "Отдельная страница года с постоянным адресом";
+      num.appendChild(yl);
       sec.appendChild(num);
 
       var body = el("div", "year-body");
