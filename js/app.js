@@ -32,9 +32,10 @@
 
   function eraIndex(y) {
     for (var i = 0; i < ERAS.length; i++) if (y >= ERAS[i].from && y <= ERAS[i].to) return i;
-    return 0;
+    return y > ERAS[ERAS.length - 1].to ? -1 : 0;   // -1: записи после 1991 года, вне советского периода
   }
-  function eraColor(y) { return ERA_COLORS[eraIndex(y) % ERA_COLORS.length]; }
+  var AFTER = { name: "После 1991 года", subtitle: "За рамками советского периода: справочная запись", color: "#5b6470" };
+  function eraColor(y) { var i = eraIndex(y); return i < 0 ? AFTER.color : ERA_COLORS[i % ERA_COLORS.length]; }
 
   // ---------- фильтрация ----------
   function activeThemes() { return Object.keys(state.themes).filter(function (k) { return state.themes[k]; }); }
@@ -134,18 +135,18 @@
       if (!list.length) return;
       total += list.length; shownYears++;
       var ei = eraIndex(y);
-      var color = ERA_COLORS[ei % ERA_COLORS.length];
+      var color = ei < 0 ? AFTER.color : ERA_COLORS[ei % ERA_COLORS.length];
 
       if (ei !== lastEra) {
         lastEra = ei;
-        var er = ERAS[ei];
+        var er = ei < 0 ? { from: y, to: y, name: AFTER.name, subtitle: AFTER.subtitle } : ERAS[ei];
         var h = el("header", "era-head");
         h.id = "era" + ei;
         h.style.setProperty("--era-c", color);
-        h.appendChild(el("span", "range", er.from + " — " + er.to));
+        h.appendChild(el("span", "range", ei < 0 ? "с 1992" : er.from + " — " + er.to));
         h.appendChild(el("h2", null, er.name));
         h.appendChild(el("p", null, er.subtitle));
-        Object.keys(CHAPTERS).forEach(function (k) {
+        if (ei >= 0) Object.keys(CHAPTERS).forEach(function (k) {
           var ch = CHAPTERS[k];
           if (ch.from <= er.to && ch.to >= er.from) {   // глава может охватывать несколько эпох
             var a = el("a", "chapter-link", "Открыть главу: «" + ch.title + "» →");
