@@ -445,7 +445,8 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
 .pop-chk i.dash{border-radius:0;height:0;border-top:3px dashed var(--muted);margin-top:9px;width:18px}
 .pop-chk small{display:block;color:var(--muted);font-size:12.5px}
 .pop-chart svg{width:100%;height:auto;display:block;-webkit-user-select:none;user-select:none}
-.pop-controls{display:flex;gap:14px;align-items:center;margin:8px 0 6px}
+.pop-controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:8px 0 6px}
+.pop-year{flex:1 1 200px}
 .pop-year{flex:1}
 .pop-year input{width:100%;accent-color:var(--accent)}
 .pop-yr{font:700 22px var(--serif);min-width:3.2em;text-align:right}
@@ -665,3 +666,4 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
   .gates,.play-modes,.path,.lifegrid,.keys,.people,.itemgrid,.hs-grid,.hs-big{grid-template-columns:1fr}
   .figs,.figs2{grid-template-columns:repeat(2,minmax(0,1fr))}   /* короткие цифры остаются по две в ряд */
 }
+@media (max-width:560px){.pop-controls .ts-btns{flex:0 0 100%}.pop-year{flex:1 1 0;min-width:0}}

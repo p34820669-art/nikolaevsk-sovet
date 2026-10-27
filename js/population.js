@@ -158,11 +158,20 @@
   document.querySelectorAll("#popLegend input[data-s]").forEach(function (cb) {
     cb.addEventListener("change", function () { visible[cb.getAttribute("data-s")] = cb.checked; render(); });
   });
-  function stop() { if (timer) { clearInterval(timer); timer = null; } play.setAttribute("aria-pressed", "false"); play.innerHTML = "&#9654; Проиграть"; }
+  function setPlayLabel(on) {   // подпись как на странице «Жизнь людей»
+    play.textContent = "";
+    if (on) { play.appendChild(document.createTextNode("❚❚ Пауза")); return; }
+    play.appendChild(document.createTextNode("▶ "));
+    var a = document.createElement("span"); a.className = "lbl-long"; a.textContent = "Показать ход времени"; play.appendChild(a);
+    var b = document.createElement("span"); b.className = "lbl-short"; b.textContent = "Ход времени"; play.appendChild(b);
+  }
+  document.getElementById("popPrev").addEventListener("click", function () { stop(); setYear(year - 1); });
+  document.getElementById("popNext").addEventListener("click", function () { stop(); setYear(year + 1); });
+  function stop() { if (timer) { clearInterval(timer); timer = null; } play.setAttribute("aria-pressed", "false"); setPlayLabel(false); }
   play.addEventListener("click", function () {
     if (timer) { stop(); return; }
     if (year >= 1991) setYear(1918);
-    play.setAttribute("aria-pressed", "true"); play.innerHTML = "&#10074;&#10074; Пауза";
+    play.setAttribute("aria-pressed", "true"); setPlayLabel(true);
     timer = setInterval(function () { if (year >= 1991) { stop(); return; } setYear(year + 1); }, 220);
   });
 

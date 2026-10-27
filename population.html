@@ -29,12 +29,16 @@
 <main class="wrap sec">
   <section class="pop-card" aria-labelledby="popH">
     <h2 id="popH" class="sr">График численности населения</h2>
-    <div class="pop-legend" id="popLegend"><label class="pop-chk"><input type="checkbox" data-s="kov" checked><i style="background:#b3392e"></i><span><b>Город (Ковальчук и хронология)</b><small>Основной ряд: справка М. А. Ковальчука и хронология автора; территория в источниках не уточнена.</small></span></label><label class="pop-chk"><input type="checkbox" data-s="census"><i style="background:#5b6470"></i><span><b>Переписи (для сравнения)</b><small>Городское население по переписям 1926–1989 годов (по Википедии); числа ниже, чем у Ковальчука.</small></span></label><label class="pop-chk"><input type="checkbox" data-s="wider" checked><i style="background:#c07a2c"></i><span><b>Город и район</b><small>Числа, которые охватывают и район или пригородную зону: 1955, 1965, 1990 годы.</small></span></label>
-      <label class="pop-chk"><input type="checkbox" id="popEst" checked><i class="dash"></i><span><b>Линия между точками</b><small>Прямая между известными годами: это оценка, а не данные.</small></span></label>
+    <div class="pop-legend" id="popLegend"><label class="pop-chk"><input type="checkbox" data-s="kov" checked><i style="background:#b3392e"></i><span><b>Город (Ковальчук и хронология)</b> <small>Основной ряд: справка М. А. Ковальчука и хронология автора; территория в источниках не уточнена.</small></span></label><label class="pop-chk"><input type="checkbox" data-s="census"><i style="background:#5b6470"></i><span><b>Переписи (для сравнения)</b> <small>Городское население по переписям 1926–1989 годов (по Википедии); числа ниже, чем у Ковальчука.</small></span></label><label class="pop-chk"><input type="checkbox" data-s="wider" checked><i style="background:#c07a2c"></i><span><b>Город и район</b> <small>Числа, которые охватывают и район или пригородную зону: 1955, 1965, 1990 годы.</small></span></label>
+      <label class="pop-chk"><input type="checkbox" id="popEst" checked><i class="dash"></i><span><b>Линия между точками</b> <small>Прямая между известными годами: это оценка, а не данные.</small></span></label>
     </div>
     <div class="pop-chart"><svg id="popSvg" viewBox="0 0 960 470" role="img" aria-label="График: численность населения Николаевска-на-Амуре по годам, тысяч человек"></svg></div>
     <div class="pop-controls">
-      <button class="btn" id="popPlay" type="button" aria-pressed="false">&#9654; Проиграть</button>
+      <div class="ts-btns">
+        <button class="btn" id="popPrev" type="button" aria-label="Предыдущий год">&#9664;<span class="lbl"> &minus;1 год</span></button>
+        <button class="btn" id="popNext" type="button" aria-label="Следующий год"><span class="lbl">+1 год </span>&#9654;</button>
+        <button class="btn primary" id="popPlay" type="button" aria-pressed="false">&#9654; <span class="lbl-long">Показать ход времени</span><span class="lbl-short">Ход времени</span></button>
+      </div>
       <label class="pop-year"><span class="sr">Год</span><input id="popRange" type="range" min="1918" max="1991" value="1939" step="1"></label>
       <output id="popYear" class="pop-yr">1939</output>
     </div>
@@ -61,17 +65,17 @@
 <tr><td>1955</td><td class="num">более 50 500</td><td>Город и район<br><small>город с пригородной зоной</small></td><td>Хронология автора: «более 50,5 тысяч человек»<br><small>Нижняя оценка: в записи сказано «более».</small></td><td><a href="1955.html#e332">запись № 332</a></td></tr>
 <tr><td>1959</td><td class="num">30 923</td><td>Переписи (для сравнения)<br><small>городское население</small></td><td>Перепись 1959 года (по статье «Николаевск-на-Амуре» в Википедии)<br><small>Вторичный источник: нужна сверка с публикациями переписей.</small></td><td>перепись</td></tr>
 <tr><td>1959</td><td class="num">38 900</td><td>Город (Ковальчук и хронология)<br><small>город</small></td><td>М. А. Ковальчук, историческая справка<br><small>Перепись 1959 года (по Википедии): 30 923 (городское население).</small></td><td><a href="1989.html#e1061">запись № 1061</a></td></tr>
-<tr><td>1965</td><td class="num">48 721</td><td>Город и район<br><small>город и район</small></td><td>Хронология автора</td><td><a href="1965.html#e425">запись № 425</a></td></tr>
+<tr><td>1965</td><td class="num">48 721</td><td>Город и район</td><td>Хронология автора</td><td><a href="1965.html#e425">запись № 425</a></td></tr>
 <tr><td>1970</td><td class="num">30 082</td><td>Переписи (для сравнения)<br><small>городское население</small></td><td>Перепись 1970 года (по статье «Николаевск-на-Амуре» в Википедии)<br><small>Вторичный источник: нужна сверка с публикациями переписей.</small></td><td>перепись</td></tr>
 <tr><td>1979</td><td class="num">33 529</td><td>Переписи (для сравнения)<br><small>городское население</small></td><td>Перепись 1979 года (по статье «Николаевск-на-Амуре» в Википедии)<br><small>Вторичный источник: нужна сверка с публикациями переписей.</small></td><td>перепись</td></tr>
 <tr><td>1979</td><td class="num">42 800</td><td>Город (Ковальчук и хронология)<br><small>город</small></td><td>Хронология автора; то же число у Ковальчука<br><small>Перепись 1979 года (по Википедии): 33 529.</small></td><td><a href="1979.html#e569">запись № 569</a></td></tr>
 <tr><td>1989</td><td class="num">36 296</td><td>Переписи (для сравнения)<br><small>городское население</small></td><td>Перепись 1989 года (по статье «Николаевск-на-Амуре» в Википедии)<br><small>Вторичный источник: нужна сверка с публикациями переписей.</small></td><td>перепись</td></tr>
 <tr><td>1989</td><td class="num">46 700</td><td>Город (Ковальчук и хронология)<br><small>город</small></td><td>Хронология автора; то же число у Ковальчука<br><small>Перепись 1989 года (по Википедии): 36 296. В той же записи хронологии: рождаемость превышала смертность, приезд в район и город превышал выезд.</small></td><td><a href="1989.html#e661">запись № 661</a></td></tr>
-<tr><td>1990</td><td class="num">56 000</td><td>Город и район<br><small>город и район</small></td><td>Хронология автора («по итогам переписи») и статистический сборник «Показатели социального и экономического развития городов и районов Хабаровского края в 1990 году» (1991, с. 6): 56,0 тыс.</td><td><a href="1990.html#e687">запись № 687</a></td></tr>
+<tr><td>1990</td><td class="num">56 000</td><td>Город и район</td><td>Хронология автора («по итогам переписи») и статистический сборник «Показатели социального и экономического развития городов и районов Хабаровского края в 1990 году» (1991, с. 6): 56,0 тыс.</td><td><a href="1990.html#e687">запись № 687</a></td></tr>
 <tr><td>1991</td><td class="num">46 100</td><td>Город (Ковальчук и хронология)<br><small>город</small></td><td>М. А. Ковальчук, историческая справка<br><small>Последний год Советского Союза.</small></td><td><a href="1989.html#e1061">запись № 1061</a></td></tr>
     </tbody>
   </table></div>
-  <p class="sec-sub" style="margin-top:18px">Все источники сайта: <a href="sources.html">раздел «Источники»</a>. Нашли другие числа или знаете, как сверить разные «города»? Напишите автору (контакт &mdash; в блоке «О проекте» на <a href="index.html">главной</a>).</p>
+  <p class="sec-sub" style="margin-top:18px">Все источники сайта: <a href="sources.html">раздел «Источники»</a>. Нашли другие числа или знаете, как сверить разные «города»? Напишите автору: <a href="https://t.me/badanimator" target="_blank" rel="noopener">Telegram, @badanimator</a>.</p>
 </main>
 <footer class="foot">
   <div class="wrap">
