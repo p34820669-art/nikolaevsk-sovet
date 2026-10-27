@@ -66,7 +66,7 @@
     renderWanted(wanted);
     $("cnt").textContent = q
       ? "Найдено: " + shown + " " + NK.plural(shown, "улица с историей названия", "улицы с историей названия", "улиц с историей названия") + ", в списке «ищем»: " + wanted.length
-      : "С историей названия: " + D.items.length + " " + NK.plural(D.items.length, "улица", "улицы", "улиц") + ". Ещё " + D.wanted.length + " улиц с карты ждут своей истории.";
+      : "С историей названия: " + D.items.length + " " + NK.plural(D.items.length, "улица", "улицы", "улиц") + ". Ждут своей истории ещё " + D.wanted.length + " " + NK.plural(D.wanted.length, "улица", "улицы", "улиц") + " с карты.";
     if (q && !shown && !wanted.length) box.appendChild(el("div", "empty", "Ничего не найдено. Попробуйте другое слово."));
   }
 
