@@ -540,7 +540,7 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
 .decade .dl a:hover{border-color:var(--accent)}
 .decade .dl a.ps{border-style:dashed;color:var(--muted)}
 .decade small{align-self:center;color:var(--muted);font-size:12px}
-.crowd{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap;margin:18px 0}
+.crowd{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap;margin:18px 0 8px}
 .crowd[hidden]{display:none}
 .crowd span{flex:1 1 260px;color:var(--muted);font-size:14px;line-height:1.45}
 
