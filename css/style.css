@@ -27,7 +27,7 @@
 [hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--rail-h) + 16px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
-.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1760px;margin:0 auto;padding:0 clamp(20px,3.5vw,72px)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 a{color:var(--water)}
 button{font-family:inherit}
@@ -625,3 +625,30 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
 /* игры */
 .back-games{display:inline-flex;align-items:center;min-height:44px;margin:0 0 10px;padding:0;border:0;background:none;color:var(--water);font:600 15px var(--sans);cursor:pointer}
 .sec h2.game-group,.game-group{font:700 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+
+/* ============ Широкая вёрстка: используем всю ширину экрана ============ */
+@media (min-width:900px){
+  .topnav .wrap{flex-wrap:nowrap}
+  .sec>p,.sec>.sec-sub,.sec>section>p,.about>p{max-width:110ch}
+  .year{grid-template-columns:130px 1fr}
+  .year-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:12px 16px;align-items:start}
+  .year-body>.figs,.year-body>.figs-title,.year-body>.lead-card,.year-body>.show-more{grid-column:1/-1}
+  .year-body>.card{margin:0}
+  .tools .search{max-width:none}
+  .itemgrid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+  .gates{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .keys,.people{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+}
+@media (min-width:900px){
+  .about{max-width:none}
+  #hod{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:0 16px;align-items:start}
+  #hod>h2,#hod>.sec-sub,#hod>.tl-year{grid-column:1/-1}
+  #hod>.tl-item{margin:0 0 6px}
+  .compare{max-width:none}
+}
+@media (min-width:1200px){
+  .prose{max-width:none;columns:2;column-gap:64px}
+  .prose p{break-inside:avoid-column}
+  .chapter-hero .sub{max-width:1100px}
+  .lead{max-width:1000px}
+}
