@@ -5,6 +5,7 @@
   var ICON = { plus: "＋", limit: "⚠", info: "●" };
   var cards = {}, panels = {};
 
+  dimsBox.textContent = "";   // статическая копия сфер нужна поисковикам, в браузере сферы рисует скрипт
   document.getElementById("lifenote").appendChild(document.createTextNode(L.note));
 
   // ---------- карточки сфер под ползунком ----------
@@ -82,7 +83,9 @@
       row.appendChild(lab);
       var w = it.value / max * 100;
       var bar = el("div", "cbar"); var i = el("i"); i.style.width = "0"; i.dataset.w = w.toFixed(1); bar.appendChild(i);
-      var val = el("span", w < 30 ? "out" : null, it.value.toLocaleString("ru-RU") + (sr.unit ? " " + sr.unit : ""));
+      var FORMS = { "часов": ["час", "часа", "часов"], "чел.": ["чел.", "чел.", "чел."], "коек": ["койка", "койки", "коек"] };   // «72 часа», а не «72 часов»
+      var unit = sr.unit && FORMS[sr.unit] && it.value === Math.floor(it.value) ? NK.plural(it.value, FORMS[sr.unit][0], FORMS[sr.unit][1], FORMS[sr.unit][2]) : sr.unit;
+      var val = el("span", w < 30 ? "out" : null, it.value.toLocaleString("ru-RU") + (unit ? " " + unit : ""));
       if (w < 30) val.style.left = "calc(" + w.toFixed(1) + "% + 8px)";   // подпись узкого столбика выносим за его край
       bar.appendChild(val);
       row.appendChild(bar); box.appendChild(row);
