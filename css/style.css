@@ -562,7 +562,6 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
 .chnav .wrap::-webkit-scrollbar{display:none}
 .chnav a{flex:none;font:600 14px var(--sans);color:var(--ink);text-decoration:none;border:2px solid var(--line);border-radius:999px;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;background:var(--surface)}
 .chnav a:hover{border-color:var(--era)}
-.figs2{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
 @media (max-width:600px){
   .figs2{grid-template-columns:repeat(2,1fr)}
   .figs2 .fig{padding:10px 12px}
@@ -635,9 +634,6 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
   .year-body>.figs,.year-body>.figs-title,.year-body>.lead-card,.year-body>.show-more{grid-column:1/-1}
   .year-body>.card{margin:0}
   .tools .search{max-width:none}
-  .itemgrid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
-  .gates{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .keys,.people{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
 }
 @media (min-width:900px){
   .about{max-width:none}
@@ -651,4 +647,21 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
   .prose p{break-inside:avoid-column}
   .chapter-hero .sub{max-width:1100px}
   .lead{max-width:1000px}
+}
+
+/* ============ Единая модульная сетка карточек ============
+   Все сетки карточек (главная, игры, главы, справка, жизнь, улицы, жильё): 4 колонки на десктопе, 2 на планшете, 1 на телефоне.
+   Колонки фиксированные (не auto-fit): блок из 2 или 3 карточек занимает первые колонки и не растягивается. */
+.gates,.play-modes,.path,.lifegrid,.keys,.people,.itemgrid,.hs-grid,.hs-big,.figs,.figs2{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:stretch}
+.gate,.mode,.node,.lcard,.person,.icard,.hs-card,.keys li,.fig,.hs-big>div{display:flex;flex-direction:column;justify-content:flex-start;min-width:0}
+.gate .ico,.mode .ico,.lcard .ico{font-size:28px;line-height:1.2;margin-bottom:6px}
+.gate strong,.mode strong,.node strong,.lcard h3,.icard h3,.person h3{font-size:19px;line-height:1.25}
+.lcard .open,.node .st,.icard .report{margin-top:auto;padding-top:12px}
+@media (max-width:1024px){
+  .gates,.play-modes,.path,.lifegrid,.keys,.people,.itemgrid,.hs-grid,.hs-big,.figs,.figs2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .gates,.play-modes,.path,.lifegrid,.keys,.people,.itemgrid,.hs-grid,.hs-big{grid-template-columns:1fr}
+  .figs,.figs2{grid-template-columns:repeat(2,minmax(0,1fr))}   /* короткие цифры остаются по две в ряд */
 }
