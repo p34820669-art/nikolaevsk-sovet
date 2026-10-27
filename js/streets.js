@@ -6,7 +6,7 @@
   var memById = {};
   MEM.forEach(function (m) { memById[m.id] = m; });
   var $ = function (id) { return document.getElementById(id); };
-  var HEAD = { "Город": "В городе", "Красное": "Село Красное", "Маго (Овсяное Поле)": "Посёлок Маго, микрорайон Овсяное Поле" };
+  var HEAD = { "Город": "В городе", "Красное": "Село Красное", "Маго (Овсяное поле)": "Посёлок Маго, микрорайон Овсяное поле" };
 
   function link(text, href) { var a = el("a", null, text); a.href = href; return a; }
 
