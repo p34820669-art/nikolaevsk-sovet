@@ -145,7 +145,7 @@
     box.appendChild(el("h3", null, "Печати за эпохи (" + stamps(S) + " из 7)"));
     var st = el("div", "stamps");
     CHAPTERS.forEach(function (c) {
-      var a = el("a", "stamp" + (S.stamps[c[0]] ? " on" : "")); a.href = "chapter.html?c=" + c[0]; a.style.setProperty("--c", c[2]);
+      var a = el("a", "stamp" + (S.stamps[c[0]] ? " on" : "")); a.href = "chapter-" + c[1].replace("–", "-") + ".html"; a.style.setProperty("--c", c[2]);
       a.appendChild(el("b", null, S.stamps[c[0]] ? "✔" : "?")); a.appendChild(el("span", null, c[1]));
       a.title = S.stamps[c[0]] ? "Печать получена" : "Пройдите викторину главы: нужно 6 верных ответов из 8";
       a.addEventListener("click", function () { panel.hidden = true; });

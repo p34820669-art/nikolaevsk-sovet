@@ -150,7 +150,7 @@
           var ch = CHAPTERS[k];
           if (ch.from <= er.to && ch.to >= er.from) {   // глава может охватывать несколько эпох
             var a = el("a", "chapter-link", "Открыть главу: «" + ch.title + "» →");
-            a.href = "chapter.html?c=" + k;
+            a.href = "chapter-" + ch.from + "-" + ch.to + ".html";
             h.appendChild(a);
           }
         });

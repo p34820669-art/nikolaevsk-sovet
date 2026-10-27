@@ -39,7 +39,7 @@
     a.className = "nl";
     a.href = p[0];
     a.textContent = p[1];
-    if (p[0].split("#")[0] === here) a.setAttribute("aria-current", "page");
+    if (p[0].split("#")[0] === here || (p[0] === "chapter.html" && /^chapter-/.test(here))) a.setAttribute("aria-current", "page");
     links.appendChild(a);
   });
   inner.appendChild(links);

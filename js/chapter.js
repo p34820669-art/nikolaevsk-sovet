@@ -3,11 +3,14 @@
   var NK = window.NK, el = NK.el;
   var ALL = window.CHAPTERS || {};
   var qs = new URLSearchParams(location.search);
-  var key = qs.get("c") || location.hash.slice(1);  // ?c=war (старые ссылки #war тоже работают)
+  var key = window.CHAPTER_KEY || qs.get("c") || location.hash.slice(1);  // у статической страницы главы ключ задан в HTML; ?c=war и #war - старые адреса
+  function fileOf(k) { return "chapter-" + ALL[k].from + "-" + ALL[k].to + ".html"; }
   var ORDER0 = Object.keys(ALL).sort(function (a, b) { return ALL[a].from - ALL[b].from; });
   if (!ALL[key] && /^[1-7]$/.test(qs.get("id") || "")) key = ORDER0[parseInt(qs.get("id"), 10) - 1];   // ?id=2 - вторая глава
   var C = ALL[key];
+  if (C && !window.CHAPTER_KEY) { location.replace(fileOf(key) + (qs.get("c") ? location.hash : "")); return; }   // старый адрес chapter.html?c=war ведёт на страницу главы
   var root = document.getElementById("chapter");
+  root.textContent = "";   // статическая разметка нужна поисковикам и превью; в браузере главу рисует скрипт
   var ERAS = window.SITE_DATA.meta.eras;
   function eraColor(from) {
     for (var i = 0; i < ERAS.length; i++) if (ERAS[i].from === from) return NK.ERA_COLORS[i];
@@ -34,7 +37,7 @@
     var lg = el("div", "path");
     ORDER.forEach(function (k, n) {
       var ch = ALL[k], on = g && g.hasStamp(k);
-      var a = el("a", "node" + (on ? " on" : "")); a.href = "chapter.html?c=" + k;
+      var a = el("a", "node" + (on ? " on" : "")); a.href = fileOf(k);
       a.style.setProperty("--c", eraColor(ch.from));
       a.appendChild(el("span", "no", String(n + 1)));
       a.appendChild(el("span", "yrs", ch.from + "–" + ch.to));
@@ -323,8 +326,8 @@
   sb2.appendChild(su);
   s8.appendChild(sb2);
   var pos = ORDER.indexOf(key), nav2 = el("div", "actions"); nav2.style.margin = "26px 0 40px";
-  if (pos > 0) { var pv = el("a", "btn", "← " + ALL[ORDER[pos - 1]].title + " (" + ALL[ORDER[pos - 1]].from + "–" + ALL[ORDER[pos - 1]].to + ")"); pv.href = "chapter.html?c=" + ORDER[pos - 1]; nav2.appendChild(pv); }
-  if (pos < ORDER.length - 1) { var nx2 = el("a", "btn primary", "Дальше: " + ALL[ORDER[pos + 1]].title + " (" + ALL[ORDER[pos + 1]].from + "–" + ALL[ORDER[pos + 1]].to + ") →"); nx2.href = "chapter.html?c=" + ORDER[pos + 1]; nav2.appendChild(nx2); }
+  if (pos > 0) { var pv = el("a", "btn", "← " + ALL[ORDER[pos - 1]].title + " (" + ALL[ORDER[pos - 1]].from + "–" + ALL[ORDER[pos - 1]].to + ")"); pv.href = fileOf(ORDER[pos - 1]); nav2.appendChild(pv); }
+  if (pos < ORDER.length - 1) { var nx2 = el("a", "btn primary", "Дальше: " + ALL[ORDER[pos + 1]].title + " (" + ALL[ORDER[pos + 1]].from + "–" + ALL[ORDER[pos + 1]].to + ") →"); nx2.href = fileOf(ORDER[pos + 1]); nav2.appendChild(nx2); }
   var allc = el("a", "btn", "Все главы"); allc.href = "chapter.html"; nav2.appendChild(allc);
   s8.appendChild(nav2);
 })();
