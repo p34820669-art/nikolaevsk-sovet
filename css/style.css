@@ -178,7 +178,7 @@ h1{font:700 clamp(36px,7vw,64px)/1.06 var(--serif);margin:0 0 16px;letter-spacin
 .cbar{height:32px;border-radius:8px;background:var(--chip);overflow:hidden;position:relative}
 .cbar i{display:block;height:100%;width:0;background:var(--era);border-radius:8px;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
 .cbar i.b{background:var(--water)}
-.cbar span{position:absolute;left:12px;top:0;line-height:32px;font:600 14px var(--sans);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.cbar span{position:absolute;left:12px;top:0;font:600 14px/32px var(--sans);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25)}
 .stackbar{display:flex;height:40px;border-radius:10px;overflow:hidden;margin:6px 0 12px}
 .stackbar div{width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);color:#fff;font:600 13px/40px var(--sans);text-align:center;overflow:hidden;white-space:nowrap}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted)}
@@ -486,3 +486,142 @@ details.gl p{margin:0 0 12px;color:var(--muted)}
 .hs-bars .cbar{flex:1;background:var(--chip);border-radius:8px;position:relative;height:28px}
 .hs-bars .cbar i{display:block;height:100%;background:var(--accent);border-radius:8px;opacity:.85}
 .hs-bars .cbar span{position:absolute;left:10px;top:3px;font:600 13px var(--sans);color:var(--ink);text-shadow:0 0 3px var(--surface)}
+
+/* ============ Правки по UX-аудиту ============ */
+/* шапка: кнопки не перекрываются прокручиваемым меню, нажимаются пальцем */
+.hud,.theme-btn{position:relative;z-index:50;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.hud{min-height:40px}
+.navlinks.fade-l,.navlinks.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl,0px),#000 calc(100% - var(--fr,0px)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl,0px),#000 calc(100% - var(--fr,0px)),transparent 100%)}
+.navlinks.fade-l{--fl:26px}
+.navlinks.fade-r{--fr:26px}
+@media (max-width:560px){
+  .topnav .wrap{padding-left:14px;padding-right:14px;gap:2px 8px}
+  .navlinks{gap:12px}
+  .topnav a.nl{font-size:14px;min-height:44px;display:inline-flex;align-items:center;padding:0 2px;border-bottom-width:3px}
+  .theme-btn{width:44px;height:44px}
+  .hud{min-height:44px}
+}
+/* всё, что нажимается, выглядит и работает как кнопка */
+.gate,.mode,.node,.fig a.go,.pl,.chip,.tag,.map-tab,.lmore,.more-text,.show-more,.lfold,.more-figs,.back,.ldim-head,details summary,.crowd-btn,.card-link{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.pass{cursor:pointer}.pass-card{cursor:auto}
+@media (pointer:coarse){
+  .chip,.pl,.map-tab,.more-text,.lmore,.back,.lfold,.more-figs,.show-more,.report button,.reset,.btn{min-height:44px}
+  .more-text,.lmore,.back,.report button,.reset{display:inline-flex;align-items:center}
+  .tag{min-height:38px}
+}
+/* стрелки-подсказки и отклик при нажатии */
+.gate,.mode,.node{position:relative}
+.gate::after,.mode::after{content:"→";position:absolute;right:14px;top:12px;font:700 18px var(--sans);color:var(--muted);transition:transform .15s,color .15s}
+.gate:hover::after,.mode:hover::after{color:var(--accent);transform:translateX(3px)}
+.gate:active,.mode:active,.node:active{transform:translateY(1px);border-color:var(--accent);box-shadow:none}
+.fig a.go::after{content:"→";position:absolute;right:12px;top:8px;font:700 16px var(--sans);color:var(--muted)}
+.fig a.go:active{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.fig .big{padding-right:22px}
+.card-link,.crowd-btn{display:inline-block;font:600 14px var(--sans);text-decoration:none;color:var(--water);border:2px solid var(--line);border-radius:999px;padding:9px 16px;min-height:44px;line-height:1.6;background:var(--surface)}
+.card-link:hover,.crowd-btn:hover{border-color:var(--accent);color:var(--accent)}
+.card-link:active,.crowd-btn:active{transform:translateY(1px)}
+.lcard .open{margin:12px 0 0}
+.lcard .open a{white-space:normal}
+
+/* главная: группы карточек */
+.gate-group + .gate-group{margin-top:26px}
+.gate-groups{margin-top:28px}
+.gate-title{font:700 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 -8px}
+.gate-group .gates{margin-top:16px}
+.gate{padding-right:40px}
+.hint-chips{align-items:center}
+.hint-lab{font-size:14px;color:var(--muted);margin-right:2px}
+.hint-chips .chip{background:transparent;border-style:dashed}
+.yearlinks{display:grid;gap:12px;line-height:1.3}
+.decade{display:flex;gap:6px 14px;align-items:flex-start;flex-wrap:wrap}
+.decade b{flex:0 0 64px;font:700 13px var(--sans);color:var(--muted);padding-top:13px}
+.decade .dl{display:flex;flex-wrap:wrap;gap:8px}
+.decade .dl a{display:inline-flex;align-items:center;justify-content:center;min-width:56px;min-height:44px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-weight:600;text-decoration:none}
+.decade .dl a:hover{border-color:var(--accent)}
+.decade .dl a.ps{border-style:dashed;color:var(--muted)}
+.decade small{align-self:center;color:var(--muted);font-size:12px}
+.crowd{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap;margin:18px 0}
+.crowd[hidden]{display:none}
+.crowd span{flex:1 1 260px;color:var(--muted);font-size:14px;line-height:1.45}
+
+/* карточки событий: «Читать полностью» разворачивается, а не ведёт на другую страницу */
+.more-text{border:1px solid var(--line);border-radius:999px;padding:5px 14px;margin-top:10px;background:var(--chip);color:var(--ink);font-weight:600}
+.more-text[aria-expanded="true"]{background:transparent}
+.tl-item .links a{display:inline-block;font-weight:600;text-decoration:none;margin-top:2px}
+
+/* главы: список */
+.seals{display:flex;align-items:center;gap:8px;margin:0 0 18px}
+.seals i{width:22px;height:22px;border-radius:50%;border:2px dashed var(--line);background:var(--surface)}
+.seals i.on{border:2px solid var(--accent);background:var(--accent)}
+.seals span{font:600 13px var(--sans);color:var(--muted);margin-left:6px}
+.node{padding-bottom:46px}
+.node .cta{position:absolute;right:14px;bottom:12px;font:700 14px var(--sans);color:var(--c)}
+/* главы: липкая навигация и цифры */
+.chnav{position:sticky;top:0;z-index:25;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.chnav .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:8px;padding-bottom:8px;scrollbar-width:none}
+.chnav .wrap::-webkit-scrollbar{display:none}
+.chnav a{flex:none;font:600 14px var(--sans);color:var(--ink);text-decoration:none;border:2px solid var(--line);border-radius:999px;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;background:var(--surface)}
+.chnav a:hover{border-color:var(--era)}
+.figs2{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+@media (max-width:600px){
+  .figs2{grid-template-columns:repeat(2,1fr)}
+  .figs2 .fig{padding:10px 12px}
+  .figs2 .fig .big{font-size:24px}
+  .figs2 .fig .lab{font-size:13px}
+}
+.more-figs{display:block;width:100%;margin:2px 0 18px;font:600 15px var(--sans);border:2px dashed var(--line);background:none;color:var(--ink);padding:12px 16px;border-radius:12px;min-height:44px}
+.more-figs:hover{border-color:var(--era);color:var(--era)}
+
+/* жизнь людей: липкий ползунок, шаги по годам, ровные карточки */
+.lifestage .timeslider{position:sticky;top:0;z-index:30}
+.ts-btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ts-btns .btn{padding:10px 14px}
+.lbl-short{display:none}
+.lchart .cbar span.out{color:var(--ink);text-shadow:none}
+.lfold{display:block;margin:16px 0 0;font:600 14px var(--sans);border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:8px 18px}
+@media (max-width:560px){
+  .timeslider{padding:10px 12px 8px;border-radius:16px}
+  .ts-top{flex-wrap:nowrap;gap:8px}
+  .ts-year{font-size:40px}
+  .ts-btns{gap:6px;flex-wrap:nowrap}
+  .ts-btns .btn{padding:0 12px;min-height:44px;font-size:14px}
+  .ts-btns .lbl{display:none}
+  .lbl-long{display:none}.lbl-short{display:inline}
+}
+
+/* карта: легенда сверху, вкладки со списками */
+.map-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 10px;font-size:13px;color:var(--muted)}
+.map-legend .lg-item{display:inline-flex;align-items:center;gap:6px}
+.map-legend i{width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.map-legend i.ln{width:18px;height:4px;border-radius:2px;border:0;background:var(--accent);box-shadow:none}
+.map-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 10px}
+.map-tab{font:600 14px var(--sans);padding:8px 14px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.map-tab[aria-selected="true"]{background:var(--water);border-color:var(--water);color:#fff}
+.map-filter{width:100%;font:400 15px var(--sans);padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-bottom:4px}
+.side .ev .evtext{display:block}
+.side .ev .evmore{display:inline-block;margin-top:4px;font:600 13px var(--sans);color:var(--water);text-decoration:none}
+
+/* улицы */
+.icard .links.badges{gap:8px;margin-top:12px}
+.icard .links.badges a{display:inline-flex;align-items:center;min-height:36px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--ink);font-size:13px}
+.icard .links.badges a:hover{border-color:var(--water);text-decoration:none}
+.reclist{margin:10px 0 0;padding-left:18px;font-size:14px;line-height:1.45}
+.reclist li{margin-bottom:4px}
+.reclist a{text-decoration:none;font-weight:500}
+.reclist a:hover{text-decoration:underline}
+.report button{border:1px dashed var(--line);border-radius:999px;padding:6px 14px;background:var(--surface);text-decoration:none;color:var(--ink)}
+.report button:hover{border-color:var(--water);color:var(--water)}
+
+/* паспорт */
+.quests li{padding:0}
+.quests li:not(.done) a.qgo{display:block;padding:12px 40px 12px 38px;color:var(--ink);text-decoration:none;min-height:44px}
+.quests li.done{padding:9px 12px 9px 38px}
+.quests li .arr{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:700}
+.quests li:not(.done):hover{border-color:var(--accent)}
+.reset-ask{margin-top:18px;padding:12px 14px;border:2px solid var(--accent);border-radius:12px;background:var(--surface)}
+.reset-ask p{margin:0 0 10px;font-size:14px}
+.reset-ask .btn{margin-right:8px}
+
+/* игры */
+.back-games{display:inline-flex;align-items:center;min-height:44px;margin:0 0 10px;padding:0;border:0;background:none;color:var(--water);font:600 15px var(--sans);cursor:pointer}
+.sec h2.game-group,.game-group{font:700 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}

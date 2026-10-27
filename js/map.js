@@ -78,10 +78,14 @@
     ids.slice(0, 12).forEach(function (id) {
       var e = EV[id]; if (!e) return;
       var d = el("div", "ev");
-      var a = el("a"); a.href = "index.html#e" + id;
+      var a = el("a", "evtext"); a.href = e.year + ".html#e" + id;
       a.appendChild(el("b", null, e.year + " "));
-      a.appendChild(document.createTextNode(e.text.length > 150 ? e.text.slice(0, 150).replace(/\s+\S*$/, "") + "…" : e.text));
+      var tx = e.text.replace(new RegExp("^" + e.year + "\\s*г(?:\\.|ода)?\\s*"), "");   // год уже выделен жирным: «1935 1935 г.» не нужен
+      var cut = tx.length > 150;
+      a.appendChild(document.createTextNode(cut ? tx.slice(0, 150).replace(/\s+\S*$/, "").replace(/[\s.,;:–—-]+$/, "") + "…" : tx));
       d.appendChild(a);
+      var full = el("a", "evmore", cut ? "Читать запись полностью →" : "Запись в летописи →"); full.href = e.year + ".html#e" + id;
+      d.appendChild(full);
       box.appendChild(d);
     });
     if (ids.length > 12) box.appendChild(el("p", "muted", "…и ещё " + (ids.length - 12) + " записей — в общей летописи."));
@@ -178,10 +182,38 @@
     history.replaceState(null, "", "#m=" + m.id);
   }
 
+  var curTab = "places", curFilter = "";
+  function legendBlock() {
+    var lg = el("div", "map-legend"); lg.setAttribute("aria-label", "Обозначения на карте");
+    [["#c07a2c", "посёлки района"], ["#25709b", "места в городе"], ["#7d4f93", "места памяти"], ["#e0a020", "выбранное место"]].forEach(function (x) {
+      var it = el("span", "lg-item"); var dot = el("i"); dot.style.background = x[0]; it.appendChild(dot); it.appendChild(document.createTextNode(x[1])); lg.appendChild(it);
+    });
+    var st = el("span", "lg-item"); var ln = el("i", "ln"); st.appendChild(ln); st.appendChild(document.createTextNode("красные улицы: есть записи")); lg.appendChild(st);
+    return lg;
+  }
+  function count(n, w) { return n ? n + " зап." : w || "0 зап."; }
+  function listItems(tab) {
+    if (tab === "places") return D.pois.slice().sort(function (a, b) { return b.events.length - a.events.length || a.title.localeCompare(b.title, "ru"); }).map(function (p) {
+      return { name: p.title, badge: count(p.events.length), go: function () { var l = layers.filter(function (x) { return x.item === p; })[0]; select("poi", p, l.layer); } };
+    });
+    if (tab === "settl") return (D.settlements || []).slice().sort(function (a, b) { return b.events.length - a.events.length || a.title.localeCompare(b.title, "ru"); }).map(function (p) {
+      return { name: p.title, badge: count(p.events.length), go: function () { var l = layers.filter(function (x) { return x.item === p; })[0]; select("poi", p, l.layer); } };
+    });
+    if (tab === "mem") return MEM.slice().sort(function (a, b) { return (a.year || 9999) - (b.year || 9999); }).map(function (m) {
+      return { name: m.name, badge: m.year ? String(m.year) : "год ?", go: function () { selectMem(m); } };
+    });
+    return D.streets.filter(function (s) { return s.hl; }).sort(function (a, b) {
+      return (b.events.length - a.events.length) || (b.archive - a.archive) || a.name.localeCompare(b.name, "ru");
+    }).map(function (st) {
+      var bd = count(st.events.length) + (st.archive ? " · " + st.archive + " фото" : "");
+      return { name: st.name, badge: bd, go: function () { var l = layers.filter(function (x) { return x.item === st; })[0]; select("street", st, l.layer); } };
+    });
+  }
   function home() {
     side.textContent = "";
     side.appendChild(el("h1", null, "Карта города"));
-    side.appendChild(el("p", "muted", "Нажмите на улицу или на синюю точку. Красным выделены улицы, для которых в проекте есть записи или фотоархив."));
+    side.appendChild(legendBlock());
+    side.appendChild(el("p", "muted", "Нажмите на улицу или на точку на карте, либо выберите место из списка ниже."));
     var all = el("button", "btn", "🌍 Показать весь район"); all.type = "button"; all.style.marginBottom = "12px";
     all.addEventListener("click", function () {
       var pts = (D.settlements || []).map(function (p) { return [p.lat, p.lon]; }).concat([D.center]);
@@ -195,49 +227,33 @@
       tg.appendChild(cb); tg.appendChild(document.createTextNode("Показывать места памяти (фиолетовые точки)"));
       side.appendChild(tg);
     }
-    side.appendChild(el("h2", null, "Места"));
+    var tabs = [["places", "Места"], ["settl", "Посёлки"], ["mem", "Память (" + MEM.length + ")"], ["streets", "Улицы"]].filter(function (t) { return t[0] !== "settl" || (D.settlements || []).length; }).filter(function (t) { return t[0] !== "mem" || MEM.length; });
+    if (!tabs.some(function (t) { return t[0] === curTab; })) curTab = tabs[0][0];
+    var bar = el("div", "map-tabs"); bar.setAttribute("role", "tablist");
     var list = el("div", "place-list");
-    D.pois.slice().sort(function (a, b) { return (b.events.length) - (a.events.length); }).forEach(function (p) {
-      var b = el("button", "pl", p.title); b.type = "button";
-      b.appendChild(el("small", null, p.events.length ? p.events.length + " зап." : ""));
-      b.addEventListener("click", function () { var l = layers.filter(function (x) { return x.item === p; })[0]; select("poi", p, l.layer); });
-      list.appendChild(b);
-    });
-    side.appendChild(list);
-    if ((D.settlements || []).length) {
-      side.appendChild(el("h2", null, "Посёлки района"));
-      var stl = el("div", "place-list");
-      D.settlements.slice().sort(function (a, b) { return b.events.length - a.events.length; }).forEach(function (p) {
-        var b = el("button", "pl", p.title); b.type = "button";
-        b.appendChild(el("small", null, p.events.length ? p.events.length + " зап." : ""));
-        b.addEventListener("click", function () { var l = layers.filter(function (x) { return x.item === p; })[0]; select("poi", p, l.layer); });
-        stl.appendChild(b);
+    var fi = el("input", "map-filter"); fi.type = "search"; fi.placeholder = "Быстрый поиск по названию"; fi.value = curFilter; fi.setAttribute("aria-label", "Фильтр по названию");
+    var tabBtns = {};
+    function fill() {
+      list.textContent = "";
+      var q = curFilter.trim().toLowerCase(), n = 0;
+      listItems(curTab).forEach(function (it) {
+        if (q && it.name.toLowerCase().indexOf(q) < 0) return;
+        var b = el("button", "pl", it.name); b.type = "button";
+        b.appendChild(el("small", null, it.badge));
+        b.addEventListener("click", it.go); list.appendChild(b); n++;
       });
-      side.appendChild(stl);
+      if (!n) list.appendChild(el("p", "muted", "Ничего не найдено."));
+      tabs.forEach(function (t) { tabBtns[t[0]].setAttribute("aria-selected", t[0] === curTab ? "true" : "false"); });
     }
-    if (MEM.length) {
-      var dt = el("details"); dt.style.margin = "14px 0";
-      var sm = el("summary", null, "Места памяти: " + MEM.length); sm.style.cssText = "cursor:pointer;font:700 22px/1.2 var(--serif)";
-      dt.appendChild(sm);
-      var ml = el("div", "place-list");
-      MEM.slice().sort(function (a, b) { return (a.year || 9999) - (b.year || 9999); }).forEach(function (m) {
-        var b = el("button", "pl", m.name); b.type = "button";
-        b.appendChild(el("small", null, m.year ? String(m.year) : ""));
-        b.addEventListener("click", function () { selectMem(m); });
-        ml.appendChild(b);
-      });
-      dt.appendChild(ml); side.appendChild(dt);
-    }
-    side.appendChild(el("h2", null, "Улицы"));
-    var sl = el("div", "place-list");
-    D.streets.filter(function (s) { return s.hl; }).sort(function (a, b) { return (b.events.length + b.archive / 10) - (a.events.length + a.archive / 10); }).forEach(function (s) {
-      var b = el("button", "pl", s.name); b.type = "button";
-      b.appendChild(el("small", null, s.events.length ? s.events.length + " зап." : "фото"));
-      b.addEventListener("click", function () { var l = layers.filter(function (x) { return x.item === s; })[0]; select("street", s, l.layer); });
-      sl.appendChild(b);
+    tabs.forEach(function (t) {
+      var b = el("button", "map-tab", t[1]); b.type = "button"; b.setAttribute("role", "tab");
+      b.addEventListener("click", function () { curTab = t[0]; fill(); });
+      tabBtns[t[0]] = b; bar.appendChild(b);
     });
-    side.appendChild(sl);
-    side.appendChild(el("p", "legend-map", "Оранжевые точки — посёлки района, синие — места в городе, фиолетовые — места памяти. Многовершинный и часть других посёлков ещё не нанесены."));
+    fi.addEventListener("input", function () { curFilter = fi.value; fill(); });
+    side.appendChild(bar); side.appendChild(fi); side.appendChild(list);
+    fill();
+    side.appendChild(el("p", "legend-map", "Названия улиц даны по современной карте OpenStreetMap, переименования отмечаем по мере проверки. Многовершинный и часть других посёлков ещё не нанесены."));
   }
   home();
 

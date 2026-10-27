@@ -2,7 +2,10 @@
   "use strict";
   var NK = window.NK, el = NK.el;
   var ALL = window.CHAPTERS || {};
-  var key = new URLSearchParams(location.search).get("c") || location.hash.slice(1);  // ?c=war (старые ссылки #war тоже работают)
+  var qs = new URLSearchParams(location.search);
+  var key = qs.get("c") || location.hash.slice(1);  // ?c=war (старые ссылки #war тоже работают)
+  var ORDER0 = Object.keys(ALL).sort(function (a, b) { return ALL[a].from - ALL[b].from; });
+  if (!ALL[key] && /^[1-7]$/.test(qs.get("id") || "")) key = ORDER0[parseInt(qs.get("id"), 10) - 1];   // ?id=2 - вторая глава
   var C = ALL[key];
   var root = document.getElementById("chapter");
   var ERAS = window.SITE_DATA.meta.eras;
@@ -23,7 +26,11 @@
     var ls = el("section", "sec wrap");
     var g = window.NKG, got = 0;
     ORDER.forEach(function (k) { if (g && g.hasStamp(k)) got++; });
-    ls.appendChild(el("p", "sec-sub", "Проходите главы по порядку: прочитайте, пройдите викторину (6 верных ответов из 8) и получите печать эпохи. Печатей: " + got + " из " + ORDER.length + "."));
+    ls.appendChild(el("p", "sec-sub", "Проходите главы по порядку: прочитайте, пройдите викторину (6 верных ответов из 8) и получите печать эпохи."));
+    var seals = el("div", "seals"); seals.setAttribute("role", "img"); seals.setAttribute("aria-label", "Печатей: " + got + " из " + ORDER.length);
+    ORDER.forEach(function (k) { seals.appendChild(el("i", g && g.hasStamp(k) ? "on" : "")); });
+    seals.appendChild(el("span", null, got + " из " + ORDER.length));
+    ls.appendChild(seals);
     var lg = el("div", "path");
     ORDER.forEach(function (k, n) {
       var ch = ALL[k], on = g && g.hasStamp(k);
@@ -37,6 +44,7 @@
       var best = g ? g.quizBest(k) : 0;
       st.appendChild(document.createTextNode(on ? "Печать получена (" + best + " из " + ch.quiz.length + ")" : (best ? "Лучший результат: " + best + " из " + ch.quiz.length : "Печать ещё не получена")));
       a.appendChild(st);
+      a.appendChild(el("span", "cta", "Читать главу →"));
       lg.appendChild(a);
     });
     ls.appendChild(lg);
@@ -77,25 +85,34 @@
   var prose = el("div", "prose");
   C.intro.forEach(function (t) { prose.appendChild(el("p", null, t)); });
   hw.appendChild(prose);
-  var jump = el("div", "hero-actions");
-  [["#cifry", "В цифрах"], ["#hod", "Как это было"], ["#lyudi", "Люди"], ["#quiz", "Проверь себя"]].forEach(function (l) {
-    var a = el("a", "btn", l[1]); a.href = l[0]; jump.appendChild(a);
-  });
-  hw.appendChild(jump);
   hero.appendChild(hw);
   root.appendChild(hero);
+  var jump = el("nav", "chnav"); jump.setAttribute("aria-label", "Разделы главы");
+  var jw = el("div", "wrap");
+  [["#glavnoe", "Главное"], ["#cifry", "В цифрах"], ["#hod", "Как это было"], ["#lyudi", "Люди"], ["#quiz", "Проверь себя"]].forEach(function (l) {
+    var a = el("a", null, l[1]); a.href = l[0]; jw.appendChild(a);
+  });
+  jump.appendChild(jw); root.appendChild(jump);
+  function setNavH() { document.documentElement.style.setProperty("--rail-h", jump.getBoundingClientRect().height + "px"); }
+  setNavH(); window.addEventListener("resize", setNavH);
 
   // ---------- главное ----------
-  var s1 = section("Главное за пять минут", "Если у вас всего пара минут — начните отсюда.");
+  var s1 = section("Главное за пять минут", "Если у вас всего пара минут — начните отсюда.", "glavnoe");
   var ul = el("ol", "keys");
   C.key.forEach(function (t) { ul.appendChild(el("li", null, t)); });
   s1.appendChild(ul);
 
   // ---------- в цифрах ----------
-  var s2 = section("Война в цифрах", "Цифры берутся из хронологии; нажмите на карточку, чтобы увидеть запись.", "cifry");
-  var grid = el("div", "figs");
-  (window.FIGURES || []).filter(function (f) { return f.year >= C.from && f.year <= C.to; }).forEach(function (f) {
-    var d = el("div", "fig");
+  var s2 = section(key === "war" ? "Война в цифрах" : "Эпоха в цифрах", "Цифры берутся из хронологии; нажмите на карточку, чтобы увидеть запись.", "cifry");
+  var grid = el("div", "figs figs2");
+  var cmpIds = C.compare.map(function (cp) { return cp.id; }).filter(Boolean);
+  var figList = (window.FIGURES || []).filter(function (f) {
+    if (f.year < C.from || f.year > C.to) return false;
+    return !(f.id && /^×/.test(f.big) && cmpIds.indexOf(f.id) >= 0);   // ту же цифру ниже показывает график
+  });
+  figList.forEach(function (f, fi) {
+    var d = el("div", "fig" + (fi >= 6 ? " extra" : ""));
+    if (fi >= 6) d.hidden = true;
     d.appendChild(el("span", "big", f.big));
     d.appendChild(el("span", "lab", f.label));
     d.appendChild(el("span", "sc", f.year + (f.scope ? " · " + f.scope : "")));
@@ -103,6 +120,16 @@
     grid.appendChild(d);
   });
   s2.appendChild(grid);
+  if (figList.length > 6) {
+    var allBtn = el("button", "more-figs", "Показать все цифры (ещё " + (figList.length - 6) + ") ↓"); allBtn.type = "button"; allBtn.setAttribute("aria-expanded", "false");
+    allBtn.addEventListener("click", function () {
+      var open = allBtn.getAttribute("aria-expanded") !== "true";
+      grid.querySelectorAll(".extra").forEach(function (n) { n.hidden = !open; });
+      allBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      allBtn.textContent = open ? "Свернуть цифры ↑" : "Показать все цифры (ещё " + (figList.length - 6) + ") ↓";
+    });
+    s2.appendChild(allBtn);
+  }
 
   var animate = [];
   C.compare.forEach(function (cp) {
@@ -167,11 +194,14 @@
   // ---------- как это было ----------
   var s3 = section("Как это было", "Главные записи года. Полный текст открывается кнопкой; вся хронология — в общей летописи.", "hod");
   var lastY = null;
-  C.timeline.forEach(function (it) {
+  // все записи одного года идут подряд под одним заголовком, годы по возрастанию (внутри года - порядок из данных)
+  var tlist = C.timeline.map(function (it, i) { return { it: it, i: i }; }).sort(function (a, b) { return (a.it.year - b.it.year) || (a.i - b.i); }).map(function (x) { return x.it; });
+  tlist = tlist.filter(function (it) { return EV[it.id]; });
+  tlist.forEach(function (it) {
     var e = EV[it.id]; if (!e) return;
     if (it.year !== lastY) {
       lastY = it.year;
-      var cnt = C.timeline.filter(function (x) { return x.year === it.year; }).length;
+      var cnt = tlist.filter(function (x) { return x.year === it.year; }).length;
       var h = el("div", "tl-year"); h.appendChild(el("b", null, String(it.year)));
       h.appendChild(el("span", null, cnt + " " + NK.plural(cnt, "событие", "события", "событий")));
       s3.appendChild(h);
@@ -184,8 +214,8 @@
     p.textContent = short;
     card.appendChild(p);
     if (long) {
-      var b = el("button", "more-text", "Читать полностью"); b.type = "button";
-      b.addEventListener("click", function () { open = !open; p.textContent = open ? full : short; b.textContent = open ? "Свернуть" : "Читать полностью"; });
+      var b = el("button", "more-text", "Читать полностью ▾"); b.type = "button"; b.setAttribute("aria-expanded", "false");
+      b.addEventListener("click", function () { open = !open; p.textContent = open ? full : short; b.textContent = open ? "Свернуть ▴" : "Читать полностью ▾"; b.setAttribute("aria-expanded", open ? "true" : "false"); });
       card.appendChild(b);
     }
     var links = el("div", "links"); links.appendChild(chronoLink(it.id)); card.appendChild(links);

@@ -43,6 +43,16 @@
     links.appendChild(a);
   });
   inner.appendChild(links);
+  // мягкое затухание по краям, когда меню на телефоне прокручивается
+  function fade() {
+    var max = links.scrollWidth - links.clientWidth;
+    links.classList.toggle("fade-l", links.scrollLeft > 4);
+    links.classList.toggle("fade-r", max > 4 && links.scrollLeft < max - 4);
+  }
+  links.addEventListener("scroll", fade, { passive: true });
+  window.addEventListener("resize", fade);
+  window.addEventListener("load", fade);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fade);
   var tb = document.createElement("button");
   tb.className = "theme-btn";
   tb.id = "themeBtn";
@@ -53,6 +63,35 @@
   nav.appendChild(inner);
   document.body.insertBefore(nav, document.body.firstChild);
   setTheme(getTheme());
+  fade();
+  var cur = links.querySelector("[aria-current]");   // текущий пункт меню не должен прятаться за краем
+  if (cur && cur.scrollIntoView && links.scrollWidth > links.clientWidth) links.scrollLeft = Math.max(0, cur.offsetLeft - 24);
+  fade();
+
+  // ---- неразрывные пробелы: «1 174», «1941 г.», «50 т», «№ 5» не рвутся на конце строки ----
+  var NB = "\u00A0";
+  function nbsp(s) {
+    s = s.replace(/(^|[^\d.,])(\d{1,3}(?: \d{3})+)(?!\d)/g, function (m, a, b) { return a + b.replace(/ /g, NB); });
+    s = s.replace(/(\d) (?=(?:г\.|гг\.|т|чел\.|тыс\.|млн|млрд|₽|руб\.|коп\.|км|кв\.|га|шт\.|кг|м|%)(?![а-яёА-ЯЁ]))/g, "$1" + NB);
+    s = s.replace(/(тыс\.|млн|млрд) (?=(?:т|₽|руб\.|чел\.|кв\.|га|шт\.|кг|км|человек|рублей|тонн|коек)(?![а-яёА-ЯЁ]))/g, "$1" + NB);   // «163 тыс. т» не рвём между «тыс.» и «т»
+    return s.replace(/(№|§) (?=\d)/g, "$1" + NB);
+  }
+  var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, INPUT: 1, CODE: 1, PRE: 1, NOSCRIPT: 1, svg: 1, SVG: 1 };
+  function fixNode(n) {
+    if (n.nodeType === 3) { var v = n.nodeValue; if (v.indexOf(" ") >= 0) { var w = nbsp(v); if (w !== v) n.nodeValue = w; } return; }
+    if (n.nodeType !== 1 || SKIP[n.nodeName]) return;
+    for (var c = n.firstChild; c; c = c.nextSibling) fixNode(c);
+  }
+  var pend = [], busy = false;
+  function flush() { busy = false; var list = pend; pend = []; list.forEach(fixNode); }
+  if (window.MutationObserver) {
+    new MutationObserver(function (ms) {
+      ms.forEach(function (m) { for (var i = 0; i < m.addedNodes.length; i++) pend.push(m.addedNodes[i]); });
+      if (!busy && pend.length) { busy = true; (window.requestAnimationFrame || setTimeout)(flush); }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  document.addEventListener("DOMContentLoaded", function () { fixNode(document.body); });
+  if (document.readyState !== "loading") fixNode(document.body);
 
   // ---- помощники ----
   window.NK = {
@@ -81,7 +120,7 @@
   // ---- «Нашли ошибку или знаете больше?» ----
   // Ничего никуда не отправляется: текст копируется в буфер, и открывается чат автора (window.SITE.contact из data/site.js).
   // ctx: {label: "Запись № 123", hint: "1942 год", text: "...", path: "index.html#e123", prompt: "Что нужно исправить или дополнить:"}
-  function shorten(s, n) { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "…" : s; }
+  function shorten(s, n) { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "").replace(/[\s.,;:–—-]+$/, "") + "…" : s; }   // без «с.…»: точку и запятую перед многоточием убираем
   function copyText(text) {
     return new Promise(function (resolve) {
       function fallback() {
@@ -98,6 +137,8 @@
     });
   }
   window.NK.shorten = shorten;
+  window.NK.nbsp = nbsp;
+  window.NK.fixText = fixNode;
   window.NK.reportSend = function (ctx, out) {
     var S = window.SITE || {};
     if (!S.contact) return;
@@ -128,7 +169,7 @@
   window.NK.report = function (ctx) {
     if (!(window.SITE && window.SITE.contact)) return null;
     var box = document.createElement("div"); box.className = "report";
-    var btn = document.createElement("button"); btn.type = "button"; btn.textContent = "Нашли ошибку или знаете больше?";
+    var btn = document.createElement("button"); btn.type = "button"; btn.textContent = "✎ Нашли ошибку или знаете больше?";
     var out = document.createElement("span"); out.className = "rmsg"; out.hidden = true; out.setAttribute("role", "status");
     btn.addEventListener("click", function () { window.NK.reportSend(ctx, out); });
     box.appendChild(btn); box.appendChild(out);

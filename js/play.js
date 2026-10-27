@@ -5,9 +5,11 @@
   var MIN = 1918, MAX = 1991;
 
   // Годные для игры записи: короткие, без года в тексте, не обрывки
+  // справочные итоги без конкретного события (численность, «являются ведущими отраслями») для игры не годятся
+  var SUMMARY = /^Численность|^В городе насчитывалось|являются ведущими|приходится до \d|являлся самым крупным/;
   var POOL = EVENTS.filter(function (e) {
     var t = e.text;
-    return t.length >= 50 && t.length <= 260 && !/\b(19|20)\d\d\b/.test(t) && !/Между тем/.test(t) && !/\bг\.\s*[–-]/.test(t);
+    return !SUMMARY.test(t) && t.length >= 50 && t.length <= 260 && !/\b(19|20)\d\d\b/.test(t) && !/Между тем/.test(t) && !/\bг\.\s*[–-]/.test(t);
   });
   var byYear = {};
   POOL.forEach(function (e) { (byYear[e.year] = byYear[e.year] || []).push(e); });
@@ -26,6 +28,10 @@
   var menu = document.getElementById("menu"), game = document.getElementById("game");
   function show(on) { menu.hidden = !!on; game.hidden = !on; game.textContent = ""; if (on) game.scrollIntoView({ block: "start" }); }
   function toMenu() { show(false); }
+  function backBtn() {   // выход из партии без перезагрузки страницы
+    var b = el("button", "back-games", "← Ко всем играм"); b.type = "button"; b.addEventListener("click", toMenu); return b;
+  }
+  function hearts(n) { return "♥".repeat(Math.max(0, n)) + "♡".repeat(Math.max(0, 3 - n)); }
   function shareText(t) {
     try { navigator.clipboard.writeText(t); return true; } catch (e) { return false; }
   }
@@ -40,6 +46,7 @@
       game.textContent = "";
       if (round >= ROUNDS) return finish();
       cur = pickEvent(used); used.push(cur.id); hinted = false; round++;
+      game.appendChild(backBtn());
       var card = el("div", "gcard");
       var top = el("div", "gtop"); top.appendChild(el("span", null, "Событие " + round + " из " + ROUNDS)); top.appendChild(el("span", null, "Очки: " + total));
       card.appendChild(top);
@@ -63,6 +70,7 @@
         hint.textContent = "Эпоха: «" + era + "»" + th;
       });
       ok.addEventListener("click", function () {
+        if (window.NKG) window.NKG.action("game:year");   // задание дня засчитываем с первого ответа
         var guess = parseInt(sl.value, 10), diff = Math.abs(guess - cur.year);
         var pts = Math.max(0, 100 - diff * 4) - (hinted ? 20 : 0); if (pts < 0) pts = 0;
         total += pts; ok.disabled = true; hb.disabled = true; sl.disabled = true;
@@ -109,10 +117,12 @@
       if (lives <= 0) return finish();
       var a = pickEvent(), b, tries = 0;
       do { b = pickEvent([a.id]); tries++; } while ((Math.abs(a.year - b.year) < 4) && tries < 60);
+      game.appendChild(backBtn());
       var card = el("div", "gcard");
       var top = el("div", "gtop");
       top.appendChild(el("span", null, "Какое событие случилось РАНЬШЕ?"));
-      top.appendChild(el("span", "streak", "Серия: " + streak + " · жизни: " + "♥".repeat(lives)));
+      var streakNode = el("span", "streak", "Серия: " + streak + " · жизни: " + hearts(lives));
+      top.appendChild(streakNode);
       card.appendChild(top);
       var pair = el("div", "pair");
       var btns = [];
@@ -126,7 +136,9 @@
             var y = el("span", "yr", String(ev.year)); x.appendChild(y);
             if (ev === earlier) x.classList.add("right");
           });
+          if (window.NKG) window.NKG.action("game:pair");   // задание дня засчитываем с первого ответа
           if (right) { streak++; answered++; } else { bt.classList.add("wrong"); lives--; streak = 0; }
+          streakNode.textContent = "Серия: " + streak + " · жизни: " + hearts(lives);   // сердечко гаснет сразу, до «Дальше»
           if (streak > gameBest) gameBest = streak;
           if (streak > best) { best = streak; try { localStorage.setItem("nk-best-pair", String(best)); } catch (er) {} }
           var res = el("div", "result");

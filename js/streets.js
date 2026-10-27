@@ -20,19 +20,21 @@
     c.appendChild(el("p", null, it.why));
     c.appendChild(el("p", "src", "Источник: " + it.source + "."));
 
-    var links = el("div", "links");
+    var badges = el("div", "links badges"), recs = el("ul", "reclist");
     if (it.street.length) {
-      links.appendChild(link("На карте →", "map.html#s=" + it.street.map(encodeURIComponent).join("|") + "&t=" + encodeURIComponent(it.name)));
+      badges.appendChild(link("🗺 На карте", "map.html#s=" + it.street.map(encodeURIComponent).join("|") + "&t=" + encodeURIComponent(it.name)));
     }
     it.memorials.forEach(function (id) {
       var m = memById[id]; if (!m) return;
-      links.appendChild(link((m.kind === "доска" ? "Мемориальная доска" : m.kind === "памятник" ? "Памятник" : "Памятный знак") + ": " + m.opened + " →", "memorials.html#" + id));
+      badges.appendChild(link((m.kind === "доска" ? "🏛 Мемориальная доска" : m.kind === "памятник" ? "🏛 Памятник" : "🏛 Памятный знак") + ", " + m.opened, "memorials.html#" + id));
     });
     it.events.forEach(function (id) {
       var e = EV[id]; if (!e) return;
-      links.appendChild(link("Запись " + e.year + " года: «" + NK.shorten(e.text, 44) + "» →", "index.html#e" + id));
+      var li = el("li"); li.appendChild(link("Запись " + e.year + " года: «" + NK.shorten(e.text, 44) + "»", "index.html#e" + id));
+      recs.appendChild(li);
     });
-    if (links.childNodes.length) c.appendChild(links);
+    if (badges.childNodes.length) c.appendChild(badges);
+    if (recs.childNodes.length) c.appendChild(recs);
 
     var rb = NK.report({ label: "Улица: " + it.name, hint: it.when, text: it.why, path: "streets.html#" + it.id });
     if (rb) c.appendChild(rb);

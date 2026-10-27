@@ -24,13 +24,24 @@
     { id: "streak", ico: "⚡", name: "Безошибочный", d: "Серия из 7 ответов в «Раньше или позже?»", ok: function (s) { return (s.best.pair || 0) >= 7; } },
     { id: "quests", ico: "📅", name: "Упорный", d: "Выполните 5 заданий дня", ok: function (s) { return (s.questsDone || 0) >= 5; } }
   ];
-  var QUESTS = [
-    { id: "chapter:read", t: "Прочитать любой раздел главы" },
-    { id: "map:open", t: "Открыть место на карте" },
-    { id: "game:year", t: "Сыграть в «Угадай год»" },
-    { id: "game:pair", t: "Сыграть в «Раньше или позже?»" },
-    { id: "life:open", t: "Изучить раздел «Жизнь людей»" },
-    { id: "quiz:done", t: "Пройти викторину главы" }
+  var PROGRESS = {   // промежуточный счётчик для значков с количественным условием: [сейчас, нужно]
+    reader: function (s) { return [count(s, "read:"), 10]; },
+    stamp1: function (s) { return [stamps(s), 1]; },
+    stamp4: function (s) { return [stamps(s), 4]; },
+    stamp7: function (s) { return [stamps(s), 7]; },
+    map8: function (s) { return [count(s, "map:"), 8]; },
+    life: function (s) { return [Math.max(0, count(s, "life:") - (s.done["life:slider"] ? 1 : 0)), 6]; },
+    chrono: function (s) { return [s.best.year || 0, 500]; },
+    streak: function (s) { return [s.best.pair || 0, 7]; },
+    quests: function (s) { return [s.questsDone || 0, 5]; }
+  };
+  var QUESTS = [   // href: куда ведёт невыполненное задание
+    { id: "chapter:read", t: "Прочитать любой раздел главы", href: "chapter.html" },
+    { id: "map:open", t: "Открыть место на карте", href: "map.html" },
+    { id: "game:year", t: "Сыграть в «Угадай год»", href: "play.html" },
+    { id: "game:pair", t: "Сыграть в «Раньше или позже?»", href: "play.html" },
+    { id: "life:open", t: "Изучить раздел «Жизнь людей»", href: "life.html" },
+    { id: "quiz:done", t: "Пройти викторину главы", href: "chapter.html" }
   ];
 
   function load() {
@@ -42,6 +53,10 @@
     return s;
   }
   var S = load();
+  function resync() { S = load(); if (S.daily.date !== today()) { S.daily = { date: today(), done: {} }; } render(); }
+  window.addEventListener("pageshow", function (e) { if (e.persisted) resync(); });   // возврат кнопкой «назад» (bfcache)
+  window.addEventListener("storage", function (e) { if (e.key === KEY) resync(); });   // другая вкладка
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) resync(); });
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   function count(s, prefix) { return Object.keys(s.done).filter(function (k) { return k.indexOf(prefix) === 0; }).length; }
   function stamps(s) { return Object.keys(s.stamps).length; }
@@ -133,13 +148,22 @@
       var a = el("a", "stamp" + (S.stamps[c[0]] ? " on" : "")); a.href = "chapter.html?c=" + c[0]; a.style.setProperty("--c", c[2]);
       a.appendChild(el("b", null, S.stamps[c[0]] ? "✔" : "?")); a.appendChild(el("span", null, c[1]));
       a.title = S.stamps[c[0]] ? "Печать получена" : "Пройдите викторину главы: нужно 6 верных ответов из 8";
+      a.addEventListener("click", function () { panel.hidden = true; });
       st.appendChild(a);
     });
     box.appendChild(st);
 
     box.appendChild(el("h3", null, "Задания дня"));
     var ql = el("ul", "quests");
-    dailyQuests().forEach(function (q) { var li = el("li", S.daily.done[q.id] ? "done" : "", q.t); ql.appendChild(li); });
+    dailyQuests().forEach(function (q) {
+      var li = el("li", S.daily.done[q.id] ? "done" : "");
+      if (S.daily.done[q.id]) li.textContent = q.t;
+      else {
+        var qa = el("a", "qgo", q.t); qa.href = q.href; qa.addEventListener("click", function () { panel.hidden = true; });
+        li.appendChild(qa); li.appendChild(el("span", "arr", "→"));
+      }
+      ql.appendChild(li);
+    });
     box.appendChild(ql);
     box.appendChild(el("p", "muted-s", "За каждое задание — 20 XP. Новые появляются каждый день."));
 
@@ -147,14 +171,23 @@
     var bl = el("div", "badges");
     BADGES.forEach(function (b) {
       var d = el("div", "badge" + (S.badges[b.id] ? " on" : "")); d.title = b.d;
-      d.appendChild(el("span", "ico", S.badges[b.id] ? b.ico : "🔒")); var t = el("div"); t.appendChild(el("b", null, b.name)); t.appendChild(el("small", null, b.d)); d.appendChild(t);
+      d.appendChild(el("span", "ico", S.badges[b.id] ? b.ico : "🔒")); var t = el("div"); t.appendChild(el("b", null, b.name));
+      var pr = !S.badges[b.id] && PROGRESS[b.id] ? PROGRESS[b.id](S) : null;
+      t.appendChild(el("small", null, b.d + (pr ? " (" + Math.min(pr[0], pr[1]) + " / " + pr[1] + ")" : ""))); d.appendChild(t);
       bl.appendChild(d);
     });
     box.appendChild(bl);
 
+    var rw = el("div", "reset-wrap");
     var reset = el("button", "reset", "Сбросить прогресс"); reset.type = "button";
-    reset.addEventListener("click", function () { if (confirm("Стереть очки, печати и значки на этом устройстве?")) { S = { xp: 0 }; try { localStorage.removeItem(KEY); } catch (e) {} S = load(); S.daily = { date: today(), done: {} }; save(); render(); fillPanel(); } });
-    box.appendChild(reset);
+    var ask = el("div", "reset-ask"); ask.hidden = true;
+    ask.appendChild(el("p", null, "Вы уверены, что хотите обнулить все очки, уровни и печати? Отменить это нельзя."));
+    var yes = el("button", "btn primary", "Да, обнулить"); yes.type = "button";
+    var no = el("button", "btn", "Отмена"); no.type = "button";
+    reset.addEventListener("click", function () { ask.hidden = false; reset.hidden = true; });
+    no.addEventListener("click", function () { ask.hidden = true; reset.hidden = false; });
+    yes.addEventListener("click", function () { try { localStorage.removeItem(KEY); } catch (e) {} S = load(); S.daily = { date: today(), done: {} }; save(); render(); fillPanel(); });
+    ask.appendChild(yes); ask.appendChild(no); rw.appendChild(reset); rw.appendChild(ask); box.appendChild(rw);
   }
   function build() {
     var nav = document.querySelector(".topnav .wrap"); if (!nav) return;
@@ -171,6 +204,11 @@
     document.body.appendChild(panel);
     hudBtn.addEventListener("click", function () { fillPanel(); panel.hidden = !panel.hidden; });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") panel.hidden = true; });
+    document.addEventListener("click", function (e) {   // ссылки вида <a data-passport> (справка) открывают паспорт
+      var l = e.target.closest && e.target.closest("[data-passport]");
+      if (l) { e.preventDefault(); fillPanel(); panel.hidden = false; }
+    });
+    if (location.hash === "#passport") { fillPanel(); panel.hidden = false; }
     render();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();

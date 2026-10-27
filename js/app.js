@@ -75,8 +75,8 @@
     }
     c.appendChild(p);
     if (long) {
-      var b = el("button", "more-text", open ? "Свернуть" : "Читать полностью");
-      b.type = "button";
+      var b = el("button", "more-text", open ? "Свернуть ▴" : "Читать полностью ▾");
+      b.type = "button"; b.setAttribute("aria-expanded", open ? "true" : "false");
       b.addEventListener("click", function () { state.expanded[e.id] = !open; render(); });
       c.appendChild(b);
     }
@@ -322,6 +322,14 @@
 
   // ---------- старт ----------
   $("stats").textContent = EVENTS.length + " " + plural(EVENTS.length, "событие", "события", "событий") + " · " + years.length + " " + plural(years.length, "год", "года", "лет") + " · " + Object.keys(THEMES).length + " тем";
+  var hc = $("hintChips");   // примеры запросов под строкой поиска
+  if (hc) hc.addEventListener("click", function (ev) {
+    var b = ev.target.closest && ev.target.closest("button[data-q]"); if (!b) return;
+    clearTimeout(timer);
+    $("q").value = b.getAttribute("data-q"); state.q = b.getAttribute("data-q").toLowerCase(); render(); scrollToTimeline();
+  });
+  var cr = $("crowd");
+  if (cr && window.SITE && window.SITE.contact) { cr.hidden = false; $("crowdBtn").href = window.SITE.contact; $("crowdBtn").target = "_blank"; $("crowdBtn").rel = "noopener"; }
   var fb = $("feedback");
   if (fb && window.SITE && window.SITE.contact) {   // блок обратной связи показываем, только если автор указал контакт
     fb.hidden = false; fb.appendChild(document.createTextNode("Нашли неточность или можете дополнить запись? "));

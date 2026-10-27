@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260929z111111">
+<link rel="stylesheet" href="css/style.css?v=20260929z1111111">
 </head>
 <body>
 <header class="hero">
@@ -19,12 +19,22 @@
   </div>
 </header>
 <main class="wrap sec">
-  <div id="menu" class="play-modes">
+  <div id="menu">
+    <h2 class="game-group">Аркадные игры</h2>
+    <div class="play-modes">
     <button class="mode" id="m-year" type="button"><span class="ico">🎯</span><strong>Угадай год</strong><span class="d">8 событий. Передвиньте ползунок на год, когда это случилось. Чем ближе — тем больше очков.</span></button>
     <button class="mode" id="m-pair" type="button"><span class="ico">⚖️</span><strong>Раньше или позже?</strong><span class="d">Два события — какое случилось раньше? Серия побед даёт рекорд.</span></button>
-    <a class="mode" href="chapter.html?c=war#quiz"><span class="ico">📚</span><strong>Викторина: война</strong><span class="d">8 вопросов по главе 1941–1945 с пояснениями.</span></a>
-    <a class="mode" href="chapter.html"><span class="ico">🏛</span><strong>Викторины по всем главам</strong><span class="d">Семь эпох, 1918–1991: у каждой главы — свои 8 вопросов с пояснениями.</span></a>
-    <a class="mode" href="chapter.html?c=postwar#quiz"><span class="ico">✈️</span><strong>Викторина: после войны</strong><span class="d">8 вопросов по главе 1946–1953: карточки, автобусы, авиация.</span></a>
+    </div>
+    <h2 class="game-group">Викторины по эпохам</h2>
+    <div class="play-modes">
+    <a class="mode" href="chapter.html?c=foundation#quiz"><span class="ico">🏗</span><strong>Глава 1: Заново, с нуля</strong><span class="d">1918–1940. 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=war#quiz"><span class="ico">🎖</span><strong>Глава 2: Всё для фронта</strong><span class="d">1941–1945. 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=postwar#quiz"><span class="ico">✈️</span><strong>Глава 3: От карточек к автобусам</strong><span class="d">1946–1953. 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=growth#quiz"><span class="ico">🧱</span><strong>Глава 4: Из дерева — в камень и сталь</strong><span class="d">1954–1964. 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=builders#quiz"><span class="ico">💡</span><strong>Глава 5: Вода, тепло и свет</strong><span class="d">1965–1975. 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=shipyard#quiz"><span class="ico">⚓</span><strong>Глава 6: Суда для всей страны</strong><span class="d">1976–1985. 8 вопросов с пояснениями.</span></a>
+    <a class="mode" href="chapter.html?c=perestroika#quiz"><span class="ico">🌅</span><strong>Глава 7: На пороге перемен</strong><span class="d">1986–1991. 8 вопросов с пояснениями.</span></a>
+    </div>
   </div>
   <div id="game" class="game" hidden></div>
 </main>
@@ -34,9 +44,9 @@
     <a href="#top">Наверх ↑</a>
   </div>
 </footer>
-<script src="data/events.js?v=20260929z111111"></script>
-<script src="js/common.js?v=20260929z111111"></script>
-<script src="js/game.js?v=20260929z111111"></script>
-<script src="js/play.js?v=20260929z111111"></script>
+<script src="data/events.js?v=20260929z1111111"></script>
+<script src="js/common.js?v=20260929z1111111"></script>
+<script src="js/game.js?v=20260929z1111111"></script>
+<script src="js/play.js?v=20260929z1111111"></script>
 </body>
 </html>
